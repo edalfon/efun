@@ -2,6 +2,8 @@
 # https://pkgdown.r-lib.org/articles/pkgdown.html
 # https://pkgdown.r-lib.org/reference/build_reference.html
 
+url: https://edalfon.github.io/efun/
+
 # opt-in for Bootstrap 5 in the new version of pkgdown pkgdown 2.0.0
 template:
   bootstrap: 3
