@@ -1,5 +1,7 @@
 test_that("file_head and file_tail works", {
 
+  skip_on_os(c("mac", "linux", "solaris"))
+
   # just a csv version of mtcars, created using
   # readr::write_csv(mtcars, "mtcars.csv")
   src_file <- test_path("test-data/mtcars.csv")
