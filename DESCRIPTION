@@ -58,3 +58,5 @@ Suggests:
     dbplyr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://github.com/edalfon/efun
+BugReports: https://github.com/edalfon/efun/issues
