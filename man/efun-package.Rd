@@ -8,6 +8,14 @@
 \description{
 A package where I put functions that, at the time, did not belong somewhere else. A bunch of those functions get refactored, but some of them stick around as utility functions.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/edalfon/efun}
+  \item Report bugs at \url{https://github.com/edalfon/efun/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Eduardo Alfonso-Sierra \email{edalfon@gmail.com} (\href{https://orcid.org/0000-0001-6430-5135}{ORCID}) [copyright holder]
 
