@@ -95,4 +95,6 @@ reference:
   - normalize_text
   - are_paired
   - timestamp_it
+  - "%#%"
+  - "%#_%"
 
