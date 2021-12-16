@@ -1,0 +1,11 @@
+pandoc: 2.7.3
+pkgdown: 2.0.1
+pkgdown_sha: ~
+articles:
+  abridge: abridge.html
+  efun: efun.html
+last_built: 2021-12-16T09:56Z
+urls:
+  reference: https://edalfon.github.io/efun/reference
+  article: https://edalfon.github.io/efun/articles
+
