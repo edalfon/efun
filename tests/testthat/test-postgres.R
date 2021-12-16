@@ -8,10 +8,10 @@ test_that("pg_create_table works", {
     duckdb::dbDisconnect(con, shutdown=TRUE)
   })
 
-  test_csv_path <- normalizePath(test_path("test-data/mtcars.csv"))
+  #test_csv_path <- normalizePath(test_path("test-data/mtcars.csv"))
 
-  # test_csv_path <- tempfile(fileext = ".csv")
-  # write.table(mtcars, test_csv_path, row.names = FALSE)
+  test_csv_path <- tempfile(fileext = ".csv")
+  write.table(mtcars, test_csv_path, row.names = FALSE)
 
   # Let's just create a table using mtcars csv file and check that
   # the table exists with 0 rows, and that the names are also the same
