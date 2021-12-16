@@ -1,0 +1,40 @@
+---
+title: "efun"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{efun}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(efun)
+```
+
+# Discretize 
+
+```{r}
+x <- rnorm(20)
+discretize(x, method = "quantile")
+discretize(x, method = "jenks")
+discretize(x, method = "isowidth")
+```
+
+
+# Plots
+
+## denstogram()
+
+```{r}
+denstogram(data = ggplot2::diamonds, xvar = price)
+```
+
+
+

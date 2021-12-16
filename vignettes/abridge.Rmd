@@ -1,0 +1,79 @@
+---
+title: "Abridge tabular data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Abridge tabular data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`abridge_df()` is yet another approach to summarize data, aimed to help you get
+quickly acquainted with a new data set (mostly tabular data, though). It is
+designed to be the first contact with a new data set, providing answers -ideally
+at a glance- to typical questions, such as:
+
+- Dimensions (number of rows/observations and columns/variables)
+- Which variables are there (name and label, if available)
+- Data type of each variable
+- How many missing values?
+- How many unique values?
+- What are the most frequent values?
+- And summary metrics (mean, sd, median, and so on) where it makes sense to 
+  calculate.
+
+This is of course nothing new and there are a myriad of alternatives out there
+to do this. In `R`, the possibilities go from the built-in `base::summary()` to 
+full-fledged packages that produce a detailed report of the `data.frame`, 
+including correlations, memory usage and other stuff. ^[There's this useful 
+[Github repo autoEDA-resources](https://github.com/mstaniak/autoEDA-resources)
+that keeps a "list of software and papers related to automated Exploratory Data 
+Analysis", including alternatives in R, Python and others.] But I was just not 
+happy with any of those and just decided to write something that better fit
+my workflow. 
+
+So, here's an example of how it works and below a list of the features I found
+important and built-in `abridge_df()` (many of them of course also available 
+in those other packages, but just not all of them in a single place).
+
+```{r out.width="100%", cache=TRUE}
+nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+efun::abridge_df(nlsw88)
+```
+
+Features:
+
+- It is a one-liner:`efun::abridge_df(new_fancy_data)` and you are good 
+  to go.
+- Try to include the most info in the space used by the output. This may not be everyone's favorite choice because: i) the output can feel cluttered and ii) it led to admittedly controversial feature that combines different info in the same column. But doing this, ideally, you should be able to see all the output in one screenshot (that's of course not possible where there are thousands of variables).
+- Shows the data set name, and the number of rows and cols.
+- The output is one row per column in the data set.
+- Variables appear in the same order as in the data set (but can be re-ordered).
+- If the variable has labels, those are included in the output as tooltips. 
+  See in the example above, I had no idea what `c_city` was, but then the 
+  label shows you if is "lives in central city".
+- Shows data type. Both the `class` and underlyinf `typeof`.
+- Shows the data on number and percentage of NAs and cardinality (# of unique values), with a visual aid to quickly spot high values and have a sense of the differences.
+- For non-numeric columns, shows the most frequent values (with count and %).
+- For numeric columns, shows basic statistics (mean, sd, quantiles), but also 
+most frequent values (as tooltips).
+- Is searchable
+- Has a visual aid to have a sense of the distribution of the variable (histogram-like), for both, numeric and non-numeric variables (in which case, it shows an ordered bar-plot that gives you a sense of how concentrated is the variable in a few or many values).
+
+
+
+<!-- 
+TODO: perhaps some time write a blog comparing features with other packages
+      speed and handling large data sets is also key, some of the packages
+      do not handle large datas sets well
+      
+TODO: take a look at this recent slides
+      https://alastairrushworth.github.io/exploring_eda/EDA.html 
+-->
+

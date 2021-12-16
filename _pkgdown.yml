@@ -1,0 +1,96 @@
+# pkgdown::build_reference(preview = TRUE)
+# https://pkgdown.r-lib.org/articles/pkgdown.html
+# https://pkgdown.r-lib.org/reference/build_reference.html
+
+# opt-in for Bootstrap 5 in the new version of pkgdown pkgdown 2.0.0
+template:
+  bootstrap: 3
+
+reference:
+- title: "Discretize"
+  desc: >
+    Convenience fns to discretize a numeric vector using different methods
+- contents:
+  - discretize
+  - get_breaks
+  - break_methods
+  - label_breaks_cut
+  - label_breaks_interval
+  - label_breaks_value
+
+
+- title: "data.frame summarization"
+  desc: >
+    A way to summarize data. Although there are several tools out there,
+    none of those fit my needs/workflow. So here's a strongly opinionated
+    approach to data.frame summarization.
+- contents:
+  - abridge_df
+  - summarize_df
+  - summarize_obj
+
+
+- title: "Join data"
+  desc: >
+    Functions that come to the rescue when your dirty data do not play nice with
+    a simple left_join
+- contents:
+  - phased_left_join
+
+
+- title: "Plots"
+  desc: >
+    Quick and helpful plots, mostly, to fit my EDA workflows.
+    Quick in the sense that most of them should be a one-function-call-plot.
+    Helpful in the sense that they include info I will likely find useful.
+- contents:
+  - denstogram
+
+
+- title: "`knitr` and R Markdown helpers"
+  desc: >
+    Just little helpers to use in .Rmd files
+- contents:
+  - time_chunk
+
+
+- title: "Text file helpers"
+  desc: >
+    Just little helpers to work with plain text files
+- contents:
+  - file_head
+  - file_tail
+  - guess_types
+
+
+- title: "Postgres"
+  desc: >
+    Here we make into a function recurrent operations while working with data in
+    PostgreSQL, typically, with the server in the local machine running on
+    Windows.
+    It automates some easy things. And we have to admit it, we keep
+    forgetting the syntax for some queries (looking at you
+    pg_get_running_queries)
+- contents:
+  - pg_create_table
+  - pg_copy_file
+  - pg_create_foreign_table
+  - pg_exists_table
+  - pg_total_relation_size
+
+
+- title: "Misc"
+  desc: >
+    Miscellaneous functions (within an already miscellaneous package)
+- contents:
+  - attr
+  - tab
+  - is_invalid_number
+  - is_unique
+  - clipboard_readfrom
+  - clipboard_writeto
+  - memory_use
+  - normalize_text
+  - are_paired
+  - timestamp_it
+

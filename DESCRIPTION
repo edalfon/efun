@@ -1,0 +1,60 @@
+Package: efun
+Title: Miscellaneous Functions by E
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Eduardo",
+           family = "Alfonso-Sierra",
+           role = c("aut", "cre", "cph"),
+           email = "edalfon@gmail.com",
+           comment = c(ORCID = "0000-0001-6430-5135"))
+Description: A package where I put functions that, at the time, did not belong 
+             somewhere else. A bunch of those functions get refactored, 
+             but some of them stick around as utility functions.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    magrittr,
+    dplyr,
+    fuzzyjoin,
+    stringi,
+    stringr,
+    usethis,
+    BAMMtools,
+    scales,
+    stats,
+    vctrs,
+    fs,
+    ggplot2,
+    plotly,
+    rlang,
+    roxygen2,
+    tibble,
+    formattable,
+    tidyr,
+    DT,
+    sparkline,
+    htmltools,
+    purrr,
+    data.table, 
+    glue,
+    sys,
+    tictoc,
+    janitor,
+    DBI
+Suggests: 
+    testthat (>= 3.0.0),
+    spelling,
+    knitr,
+    rmarkdown,
+    lubridate,
+    haven,
+    forcats,
+    duckdb,
+    withr,
+    dbplyr
+Config/testthat/edition: 3
+VignetteBuilder: knitr

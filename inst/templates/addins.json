@@ -1,0 +1,9 @@
+{
+    "WrapRmd::wrap_rmd_addin": "Ctrl+Alt+W",
+    "fnmate::rs_fnmate": "Ctrl+Alt+F",
+    "targets::rstudio_addin_tar_load": "Ctrl+Alt+L",
+    "targets::rstudio_addin_tar_outdated": "Ctrl+Alt+O",
+    "flowme::tar_make_job": "Ctrl+Alt+R",
+    "flowme::tar_visnetwork_custom": "Ctrl+Alt+V"
+    "targets::tar_edit": "Ctrl+Alt+T"
+}
