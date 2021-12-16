@@ -4,6 +4,8 @@
 # efun
 
 <!-- badges: start -->
+
+[![test-coverage](https://github.com/edalfon/efun/workflows/test-coverage/badge.svg)](https://github.com/edalfon/efun/actions)
 <!-- badges: end -->
 
 `efun` is a miscellaneous package. A collection of functions that I have
