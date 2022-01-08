@@ -1,0 +1,44 @@
+{
+    "save_workspace": "never",
+    "load_workspace": false,
+    "initial_working_directory": "~",
+    "windows_terminal_shell": "win-git-bash",
+    "insert_native_pipe_operator": true,
+    "soft_wrap_r_files": true,
+    "continue_comments_on_newline": true,
+    "highlight_selected_line": true,
+    "show_line_numbers": false,
+    "show_indent_guides": true,
+    "highlight_r_function_calls": true,
+    "rainbow_parentheses": true,
+    "show_rmd_render_command": true,
+    "panes": {
+        "quadrants": [
+            "Source",
+            "Console",
+            "TabSet1",
+            "TabSet2"
+        ],
+        "tabSet1": [
+            "Environment",
+            "History",
+            "Connections",
+            "Build",
+            "VCS",
+            "Tutorial",
+            "Presentation"
+        ],
+        "tabSet2": [
+            "Files",
+            "Plots",
+            "Packages",
+            "Help",
+            "Viewer",
+            "Presentations"
+        ],
+        "hiddenTabSet": [],
+        "console_left_on_top": false,
+        "console_right_on_top": true,
+        "additional_source_columns": 1
+    }
+}
