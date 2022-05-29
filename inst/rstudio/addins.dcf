@@ -1,0 +1,4 @@
+Name: Stop blogdown (hugo/jekyll) server
+Description: Stop blogdown (hugo/jekyll) server simply by calling blogdown::stop_server()
+Binding: blogdown_stop_server
+Interactive: false

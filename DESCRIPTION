@@ -39,12 +39,13 @@ Imports:
     sparkline,
     htmltools,
     purrr,
-    data.table, 
+    data.table,
     glue,
     sys,
     tictoc,
     janitor,
-    DBI
+    DBI,
+    blogdown
 Suggests: 
     testthat (>= 3.0.0),
     spelling,
