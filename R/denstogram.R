@@ -38,7 +38,6 @@ utils::globalVariables(c(".", "x", "y", "Info", "x_original", "frac"))
 #'            facets = color ~ .)
 #' denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
 #'            facets = color ~ ., grid_wrap = "wrap")
-#'
 denstogram <- function(
   data,
   xvar,
@@ -51,40 +50,20 @@ denstogram <- function(
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
+  summ_fn = function(x) stats::median(x, na.rm = na.rm),
   plotly = TRUE
 ) {
 
   grid_wrap <- match.arg(grid_wrap)
 
   if (missing(fillvar) & missing(facets)) {
+
     density_xvar <- denstogram_data(dplyr::pull(data, {{ xvar }}), trans, na.rm)
-  } else if (!missing(fillvar) & missing(facets)) {
-    density_xvar <- data %>%
-      group_by({{ fillvar }}) %>%
-      dplyr::do(denstogram_data(xvar = pull(., {{ xvar }}), trans = trans,
-                                na.rm = na.rm)) %>%
-      ungroup()
 
-    # Need to discretize numeric variables, so that the legend and color work
-    if (density_xvar %>% dplyr::pull({{ fillvar }}) %>% is.numeric()) {
-      density_xvar <- density_xvar %>%
-        mutate_at(vars({{ fillvar }}), as.character)
-    }
-  } else if (missing(fillvar) & !missing(facets)) {
-    eall_vars <- all.vars(stats::as.formula(facets)) # extract the facet vars
-    eall_vars <- eall_vars[!(eall_vars %in% c("."))] # excluding the dot
+    #summ_xvar <- summ_fn(dplyr::pull(data, {{ xvar }}))
 
-    grouping_enquo <- rlang::syms(eall_vars)
+  } else {
 
-    density_xvar <- data %>%
-      group_by(!!!grouping_enquo) %>%
-      dplyr::do(denstogram_data(
-        xvar = dplyr::pull(., {{ xvar }}),
-        trans = trans,
-        na.rm = na.rm
-      )) %>%
-      ungroup()
-  } else if (!missing(fillvar) & !missing(facets)) {
     eall_vars <- all.vars(stats::as.formula(facets)) # extract the facet vars
     eall_vars <- eall_vars[!(eall_vars %in% c("."))] # excluding the dot
 
@@ -92,17 +71,18 @@ denstogram <- function(
 
     density_xvar <- data %>%
       group_by(!!!grouping_enquo, {{ fillvar }}) %>%
+      # TODO: update code to use new functions in dplyr.
+      #       do() is superseded as of dplyr 1.0.0
       dplyr::do(denstogram_data(
-        xvar = dplyr::pull(., {{ xvar }}),
-        trans = trans,
-        na.rm = na.rm
+        xvar = dplyr::pull(., {{ xvar }}), trans = trans, na.rm = na.rm
       )) %>%
-      ungroup()
-    # Need to discretize numeric variables, so that the legend and color work
-    if (density_xvar %>% dplyr::pull({{ fillvar }}) %>% is.numeric()) {
-      density_xvar <- density_xvar %>%
-        mutate_at(vars({{ fillvar }}), as.character)
-    }
+      ungroup() |>
+      # Need to discretize fillvar grouping variables passed as numeric,
+      # so that the legend and color work
+      dplyr::mutate(dplyr::across(
+        .cols = {{fillvar}}, #& tidyselect:::where(is.numeric),
+        .fns = as.character
+      ))
   }
 
   # build info
@@ -111,8 +91,8 @@ denstogram <- function(
   # TODO: atomatic decimals f needed, or the full nuber for the max and min
 
   custom_breaks <- data %>%
-    pull({{ xvar }}) %>%
-    stats::quantile(probs, na.rm = na.rm) %>% # TODO: do not hard-code na.rm
+    dplyr::pull({{ xvar }}) %>%
+    stats::quantile(probs, na.rm = na.rm) %>%
     trans$transform()
 
   denstogram_breakslabels <- function(xbreaks) {
