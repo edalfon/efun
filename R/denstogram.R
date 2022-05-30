@@ -50,17 +50,19 @@ denstogram <- function(
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
+  summary_ind = c("none", "line", "text", "both"),
   summ_fn = function(x) stats::median(x, na.rm = na.rm),
   plotly = TRUE
 ) {
 
   grid_wrap <- match.arg(grid_wrap)
+  summary_ind <- match.arg(summary_ind)
 
   if (missing(fillvar) & missing(facets)) {
 
     density_xvar <- denstogram_data(dplyr::pull(data, {{ xvar }}), trans, na.rm)
 
-    #summ_xvar <- summ_fn(dplyr::pull(data, {{ xvar }}))
+    summ_xvar <- data.frame(summ_xvar = summ_fn(dplyr::pull(data, {{ xvar }})))
 
   } else {
 
@@ -83,6 +85,10 @@ denstogram <- function(
         .cols = {{fillvar}}, #& tidyselect:::where(is.numeric),
         .fns = as.character
       ))
+
+    summ_xvar <- data |>
+      dplyr::group_by(!!!grouping_enquo, {{ fillvar }}) |>
+      dplyr::summarise(summ_xvar = summ_fn({{ xvar }}))
   }
 
   # build info
@@ -139,6 +145,25 @@ denstogram <- function(
         facets = facets, ncol = facets_ncol, nrow = facets_nrow, scales = scales
       )
     }
+  }
+
+  if (summary_ind == "line" | summary_ind == "both") {
+    ggpob <- ggpob +
+      ggplot2::geom_vline(
+        data = summ_xvar,
+        aes(xintercept = summ_xvar),
+        color = "white"
+      )
+  }
+  if (summary_ind == "text" | summary_ind == "both") {
+    ggpob <- ggpob +
+      ggplot2::geom_text(
+        data = summ_xvar,
+        aes(label = scales::comma(summ_xvar), y = 0, x = summ_xvar),
+        #fontface = "bold",
+        vjust = -0.1,
+        hjust = -0.1
+      )
   }
 
   if (plotly) {

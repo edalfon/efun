@@ -30,8 +30,15 @@ pg_create_foreign_table(
 
 \item{file_path}{path to a text file (csv, tab-delimited, etc.)}
 
-\item{table}{Name of the table. Escaped with
-\code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
+\item{table}{The table name, passed on to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}. Options are:
+\itemize{
+\item a character string with the unquoted DBMS table name,
+e.g. \code{"table_name"},
+\item a call to \code{\link[DBI:Id]{Id()}} with components to the fully qualified table name,
+e.g. \code{Id(schema = "my_schema", table = "table_name")}
+\item a call to \code{\link[DBI:SQL]{SQL()}} with the quoted and fully qualified table name
+given verbatim, e.g. \code{SQL('"my_schema"."table_name"')}
+}}
 
 \item{sep}{ The separator between columns. Defaults to the character in the set \code{[,\\t |;:]} that separates the sample of rows into the most number of lines with the same number of fields. Use \code{NULL} or \code{""} to specify no separator; i.e. each line a single character column like \code{base::readLines} does.}
 

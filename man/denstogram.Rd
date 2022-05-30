@@ -16,6 +16,8 @@ denstogram(
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
+  summary_ind = c("none", "line", "text", "both"),
+  summ_fn = function(x) stats::median(x, na.rm = na.rm),
   plotly = TRUE
 )
 }
@@ -63,5 +65,4 @@ denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
            facets = color ~ .)
 denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
            facets = color ~ ., grid_wrap = "wrap")
-
 }
