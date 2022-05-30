@@ -62,7 +62,11 @@ denstogram <- function(
 
     density_xvar <- denstogram_data(dplyr::pull(data, {{ xvar }}), trans, na.rm)
 
-    summ_xvar <- data.frame(summ_xvar = summ_fn(dplyr::pull(data, {{ xvar }})))
+    summ_xvar <- data.frame(
+      summ_xvar = dplyr::pull(data, {{ xvar }}) |>
+        trans$transform() |>
+        summ_fn()
+    )
 
   } else {
 
@@ -88,7 +92,7 @@ denstogram <- function(
 
     summ_xvar <- data |>
       dplyr::group_by(!!!grouping_enquo, {{ fillvar }}) |>
-      dplyr::summarise(summ_xvar = summ_fn({{ xvar }}))
+      dplyr::summarise(summ_xvar = trans$transform(summ_fn({{ xvar }})))
   }
 
   # build info
@@ -159,7 +163,8 @@ denstogram <- function(
     ggpob <- ggpob +
       ggplot2::geom_text(
         data = summ_xvar,
-        aes(label = scales::comma(summ_xvar), y = 0, x = summ_xvar),
+        aes(label = scales::comma(trans$inverse(summ_xvar)),
+            y = 0, x = summ_xvar),
         #fontface = "bold",
         vjust = -0.1,
         hjust = -0.1
