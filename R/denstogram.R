@@ -7,19 +7,27 @@
 
 utils::globalVariables(c(".", "x", "y", "Info", "x_original", "frac"))
 
-#' Title
+#' Plot a denstogram
 #'
-#' @param data data
+#' A denstogram is a density plot, with some more info (the ecdf) to be
+#' displayed as a tooltip and the breaks of the axis showing quantiles.
+#'
+#' @param data data to plot
 #' @param xvar var to plot
 #' @param fillvar variable to fill denstogram by
-#' @param facets variable to facet the denstogram by
-#' @param grid_wrap whether to use a "grid" or "wrap" in facetting
-#' @param scales passed to facets
+#' @param facets_rows variable to facet the denstogram by
+#' @param facets_cols variable to facet the denstogram by
+#' @param facets_grid_wrap whether to use a "grid" or "wrap" in facetting
+#' @param facets_scales passed to facets
 #' @param facets_ncol cols for facets
 #' @param facets_nrow rows for facets
 #' @param trans transformation to apply from the `scales` package
 #' @param probs quantiles to include in the plot
 #' @param plotly whether to convert it to an interactive plot using plotly
+#' @param summary_geom which geom to add to the plot, to display a summary
+#' indicator calculated by summary_fn
+#' @param summary_fn function to calculate a summary indicator. Must receive
+#' one numeric vector and return a numeric vector of length 1
 #' @inheritParams stats::density
 #'
 #' @return ggplot object
@@ -30,53 +38,52 @@ utils::globalVariables(c(".", "x", "y", "Info", "x_original", "frac"))
 #' denstogram(data = ggplot2::diamonds, xvar = price)
 #' denstogram(data = ggplot2::diamonds, xvar = price, fillvar = color)
 #' denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut)
-#' denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ .)
-#' denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ .,
-#'            grid_wrap = "wrap")
-#' denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ color)
+#' denstogram(data = ggplot2::diamonds, xvar = price, facets_rows = cut)
+#' denstogram(data = ggplot2::diamonds, xvar = price, facets_rows = cut,
+#'            facets_grid_wrap = "wrap")
+#' denstogram(data = ggplot2::diamonds, xvar = price,
+#'            facets_rows = cut, facets_cols = color)
+#' denstogram(data = ggplot2::diamonds, xvar = price,
+#'            facets_rows = cut, facets_cols = color, facets_grid_wrap = "wrap")
 #' denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
-#'            facets = color ~ .)
+#'            facets_row = color)
 #' denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
-#'            facets = color ~ ., grid_wrap = "wrap")
+#'            facets_row = color, facets_grid_wrap = "wrap")
 denstogram <- function(
   data,
   xvar,
   fillvar = NULL,
-  facets = NULL,
-  grid_wrap = c("grid", "wrap"),
-  scales = "fixed",
+  facets_rows = NULL,
+  facets_cols = NULL,
+  facets_grid_wrap = c("grid", "wrap"),
+  facets_scales = "fixed",
   facets_ncol = NULL,
   facets_nrow = NULL,
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
-  summary_ind = c("none", "line", "text", "both"),
-  summ_fn = function(x) stats::median(x, na.rm = na.rm),
+  summary_geom = c("none", "line", "text", "both"),
+  summary_fn = function(x) stats::median(x, na.rm = na.rm),
   plotly = TRUE
 ) {
 
-  grid_wrap <- match.arg(grid_wrap)
-  summary_ind <- match.arg(summary_ind)
+  facets_grid_wrap <- match.arg(facets_grid_wrap)
+  summary_geom <- match.arg(summary_geom)
 
-  if (missing(fillvar) & missing(facets)) {
+  if (missing(fillvar) & missing(facets_rows) & missing(facets_cols)) {
 
     density_xvar <- denstogram_data(dplyr::pull(data, {{ xvar }}), trans, na.rm)
 
     summ_xvar <- data.frame(
       summ_xvar = dplyr::pull(data, {{ xvar }}) |>
         trans$transform() |>
-        summ_fn()
+        summary_fn()
     )
 
   } else {
 
-    eall_vars <- all.vars(stats::as.formula(facets)) # extract the facet vars
-    eall_vars <- eall_vars[!(eall_vars %in% c("."))] # excluding the dot
-
-    grouping_enquo <- rlang::syms(eall_vars)
-
     density_xvar <- data %>%
-      group_by(!!!grouping_enquo, {{ fillvar }}) %>%
+      group_by({{facets_rows}}, {{facets_cols}}, {{fillvar}}) %>%
       # TODO: update code to use new functions in dplyr.
       #       do() is superseded as of dplyr 1.0.0
       dplyr::do(denstogram_data(
@@ -91,8 +98,8 @@ denstogram <- function(
       ))
 
     summ_xvar <- data |>
-      dplyr::group_by(!!!grouping_enquo, {{ fillvar }}) |>
-      dplyr::summarise(summ_xvar = trans$transform(summ_fn({{ xvar }})))
+      group_by({{facets_rows}}, {{facets_cols}}, {{fillvar}}) %>%
+      dplyr::summarise(summ_xvar = trans$transform(summary_fn({{ xvar }})))
   }
 
   # build info
@@ -139,19 +146,30 @@ denstogram <- function(
       )
   }
 
-  if (!missing(facets)) {
-    if (grid_wrap == "grid") {
-      ggpob <- ggpob + ggplot2::facet_grid(facets, scales = scales)
-    } # TODO: facets argument is softly deprecated in favor of rows and cols
-    #       arguments, that receive a set of variables quoted by vars
-    else {
-      ggpob <- ggpob + ggplot2::facet_wrap(
-        facets = facets, ncol = facets_ncol, nrow = facets_nrow, scales = scales
+  if (!missing(facets_rows) | !missing(facets_cols)) {
+
+    if (facets_grid_wrap == "grid") {
+
+      ggpob <- ggpob + ggplot2::facet_grid(
+        rows = vars({{facets_rows}}),
+        cols = vars({{facets_cols}}),
+        scales = facets_scales
       )
+
+    }
+    else {
+
+      ggpob <- ggpob + ggplot2::facet_wrap(
+        facets = vars({{facets_rows}}, {{facets_cols}}),
+        ncol = facets_ncol,
+        nrow = facets_nrow,
+        scales = facets_scales
+      )
+
     }
   }
 
-  if (summary_ind == "line" | summary_ind == "both") {
+  if (summary_geom == "line" | summary_geom == "both") {
     ggpob <- ggpob +
       ggplot2::geom_vline(
         data = summ_xvar,
@@ -159,7 +177,7 @@ denstogram <- function(
         color = "white"
       )
   }
-  if (summary_ind == "text" | summary_ind == "both") {
+  if (summary_geom == "text" | summary_geom == "both") {
     ggpob <- ggpob +
       ggplot2::geom_text(
         data = summ_xvar,

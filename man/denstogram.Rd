@@ -2,37 +2,40 @@
 % Please edit documentation in R/denstogram.R
 \name{denstogram}
 \alias{denstogram}
-\title{Title}
+\title{Plot a denstogram}
 \usage{
 denstogram(
   data,
   xvar,
   fillvar = NULL,
-  facets = NULL,
-  grid_wrap = c("grid", "wrap"),
-  scales = "fixed",
+  facets_rows = NULL,
+  facets_cols = NULL,
+  facets_grid_wrap = c("grid", "wrap"),
+  facets_scales = "fixed",
   facets_ncol = NULL,
   facets_nrow = NULL,
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
-  summary_ind = c("none", "line", "text", "both"),
-  summ_fn = function(x) stats::median(x, na.rm = na.rm),
+  summary_geom = c("none", "line", "text", "both"),
+  summary_fn = function(x) stats::median(x, na.rm = na.rm),
   plotly = TRUE
 )
 }
 \arguments{
-\item{data}{data}
+\item{data}{data to plot}
 
 \item{xvar}{var to plot}
 
 \item{fillvar}{variable to fill denstogram by}
 
-\item{facets}{variable to facet the denstogram by}
+\item{facets_rows}{variable to facet the denstogram by}
 
-\item{grid_wrap}{whether to use a "grid" or "wrap" in facetting}
+\item{facets_cols}{variable to facet the denstogram by}
 
-\item{scales}{passed to facets}
+\item{facets_grid_wrap}{whether to use a "grid" or "wrap" in facetting}
+
+\item{facets_scales}{passed to facets}
 
 \item{facets_ncol}{cols for facets}
 
@@ -45,24 +48,34 @@ denstogram(
 \item{na.rm}{logical; if \code{TRUE}, missing values are removed
     from \code{x}. If \code{FALSE} any missing values cause an error.}
 
+\item{summary_geom}{which geom to add to the plot, to display a summary
+indicator calculated by summary_fn}
+
+\item{summary_fn}{function to calculate a summary indicator. Must receive
+one numeric vector and return a numeric vector of length 1}
+
 \item{plotly}{whether to convert it to an interactive plot using plotly}
 }
 \value{
 ggplot object
 }
 \description{
-Title
+A denstogram is a density plot, with some more info (the ecdf) to be
+displayed as a tooltip and the breaks of the axis showing quantiles.
 }
 \examples{
 denstogram(data = ggplot2::diamonds, xvar = price)
 denstogram(data = ggplot2::diamonds, xvar = price, fillvar = color)
 denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut)
-denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ .)
-denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ .,
-           grid_wrap = "wrap")
-denstogram(data = ggplot2::diamonds, xvar = price, facets = cut ~ color)
+denstogram(data = ggplot2::diamonds, xvar = price, facets_rows = cut)
+denstogram(data = ggplot2::diamonds, xvar = price, facets_rows = cut,
+           facets_grid_wrap = "wrap")
+denstogram(data = ggplot2::diamonds, xvar = price,
+           facets_rows = cut, facets_cols = color)
+denstogram(data = ggplot2::diamonds, xvar = price,
+           facets_rows = cut, facets_cols = color, facets_grid_wrap = "wrap")
 denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
-           facets = color ~ .)
+           facets_row = color)
 denstogram(data = ggplot2::diamonds, xvar = price, fillvar = cut,
-           facets = color ~ ., grid_wrap = "wrap")
+           facets_row = color, facets_grid_wrap = "wrap")
 }

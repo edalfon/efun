@@ -24,11 +24,13 @@ test_that("denstogram do not fail", {
     denstogram(
       data = ggplot2::diamonds,
       xvar = price,
-      facets = color ~ .,
-      summary_ind = "both",
-      summ_fn = mean
+      facets_rows = color,
+      summary_geom = "both",
+      summary_fn = mean
     ),
     regexp = NA # If NA, asserts that there should be no errors.
   )
+
+
 
 })
