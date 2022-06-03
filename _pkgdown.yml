@@ -57,6 +57,13 @@ reference:
   - time_chunk
 
 
+- title: "`blogdown` helpers"
+  desc: >
+    Just an RStudio addin to avoid typing `blogdown::stop_server()`
+- contents:
+  - blogdown_stop_server
+
+
 - title: "Text file helpers"
   desc: >
     Just little helpers to work with plain text files
