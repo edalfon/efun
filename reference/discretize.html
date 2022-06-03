@@ -18,7 +18,7 @@ methods (see get_breaks), and custom functions for labels and number formats"><!
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">efun</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -30,7 +30,7 @@ methods (see get_breaks), and custom functions for labels and number formats"><!
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +70,7 @@ methods (see get_breaks), and custom functions for labels and number formats</p>
   n <span class="op">=</span> <span class="fl">5</span>,
   method <span class="op">=</span> <span class="fu"><a href="break_methods.html">break_methods</a></span><span class="op">(</span><span class="op">)</span>,
   labels_formatter <span class="op">=</span> <span class="va">label_breaks_value</span>,
-  number_formatter <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_number.html" class="external-link">number_format</a></span><span class="op">(</span>big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>,
+  number_formatter <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/comma.html" class="external-link">number_format</a></span><span class="op">(</span>big.mark <span class="op">=</span> <span class="st">","</span><span class="op">)</span>,
   ordered_result <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -127,7 +127,7 @@ which results in an integer vector of level codes.</p>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># customize number format</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234567</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">discretize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, number_formatter <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/label_percent.html" class="external-link">percent</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">discretize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, number_formatter <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html" class="external-link">percent</a></span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 63%  83%  100% 23%  83%  63%  23%  100% 63%  100% 63%  43%  23%  63%  83% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [16] 63%  23%  100% 63%  83%  100% 43%  100% 43%  43%  43%  43%  23%  43%  83% </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [31] 83%  100% 23%  100% 63%  23%  63%  83%  63%  100% 23%  43%  83%  83%  23% </span>
@@ -194,7 +194,7 @@ which results in an integer vector of level codes.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

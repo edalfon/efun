@@ -20,7 +20,7 @@ let's create a foreign table that you can query just like a regular table."><!--
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">efun</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -32,7 +32,7 @@ let's create a foreign table that you can query just like a regular table."><!--
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -98,8 +98,13 @@ let's create a foreign table that you can query just like a regular table.</p>
 <dt>file_path</dt>
 <dd><p>path to a text file (csv, tab-delimited, etc.)</p></dd>
 <dt>table</dt>
-<dd><p>Name of the table. Escaped with
-<code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>.</p></dd>
+<dd><p>The table name, passed on to <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>. Options are:</p><ul><li><p>a character string with the unquoted DBMS table name,
+e.g. <code>"table_name"</code>,</p></li>
+<li><p>a call to <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> with components to the fully qualified table name,
+e.g. <code>Id(schema = "my_schema", table = "table_name")</code></p></li>
+<li><p>a call to <code><a href="https://dbi.r-dbi.org/reference/SQL.html" class="external-link">SQL()</a></code> with the quoted and fully qualified table name
+given verbatim, e.g. <code>SQL('"my_schema"."table_name"')</code></p></li>
+</ul></dd>
 <dt>sep</dt>
 <dd><p>The separator between columns. Defaults to the character in the set <code>[,\t |;:]</code> that separates the sample of rows into the most number of lines with the same number of fields. Use <code>NULL</code> or <code>""</code> to specify no separator; i.e. each line a single character column like <code><a href="https://rdrr.io/r/base/readLines.html" class="external-link">base::readLines</a></code> does.</p></dd>
 <dt>nrows</dt>
@@ -164,7 +169,7 @@ so the workaround is to change the user running the server</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
