@@ -198,7 +198,7 @@ denstogram <- function(
     ggpob <- plotly::ggplotly(ggpob,
       tooltip = c("label", "fill"),
       dynamicTicks = FALSE
-    )
+    ) %>% plotly::style(textposition = "top right")
   }
 
   ggpob

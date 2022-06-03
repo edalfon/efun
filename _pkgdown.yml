@@ -47,6 +47,7 @@ reference:
     Helpful in the sense that they include info I will likely find useful.
 - contents:
   - denstogram
+  - ecdfgram
 
 
 - title: "`knitr` and R Markdown helpers"

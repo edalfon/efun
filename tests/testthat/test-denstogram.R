@@ -20,16 +20,15 @@ test_that("denstogram do not fail", {
   )
 
   # Testing that the basic summary works
-  expect_error(
+  expect_error({
     denstogram(
       data = ggplot2::diamonds,
       xvar = price,
       facets_rows = color,
       summary_geom = "both",
       summary_fn = mean
-    ),
-    regexp = NA # If NA, asserts that there should be no errors.
-  )
+    )
+  }, regexp = NA) # If NA, asserts that there should be no errors.
 
 
 
