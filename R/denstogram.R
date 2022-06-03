@@ -28,6 +28,8 @@ utils::globalVariables(c(".", "x", "y", "Info", "x_original", "frac"))
 #' indicator calculated by summary_fn
 #' @param summary_fn function to calculate a summary indicator. Must receive
 #' one numeric vector and return a numeric vector of length 1
+#' @param yaxis_title character vector length 1
+#' @param xaxis_title character vector length 1
 #' @inheritParams stats::density
 #'
 #' @return ggplot object
@@ -64,6 +66,8 @@ denstogram <- function(
   na.rm = TRUE,
   summary_geom = c("none", "line", "text", "both"),
   summary_fn = function(x) stats::median(x, na.rm = na.rm),
+  yaxis_title = "Density",
+  xaxis_title = "",
   plotly = TRUE
 ) {
 
@@ -124,9 +128,10 @@ denstogram <- function(
 
   ggpob <- ggplot2::ggplot(density_xvar, aes(x = x, y = y, label = Info)) +
     theme_bw() +
-    scale_y_continuous("", breaks = 0, expand = expansion(mult = c(0, .05))) +
+    scale_y_continuous(yaxis_title, breaks = 0,
+                       expand = expansion(mult = c(0, .05))) +
     scale_x_continuous(
-      "",
+      xaxis_title,
       labels = denstogram_breakslabels,
       breaks = custom_breaks,
       minor_breaks = NULL,

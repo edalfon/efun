@@ -19,6 +19,8 @@ denstogram(
   na.rm = TRUE,
   summary_geom = c("none", "line", "text", "both"),
   summary_fn = function(x) stats::median(x, na.rm = na.rm),
+  yaxis_title = "Density",
+  xaxis_title = "",
   plotly = TRUE
 )
 }
@@ -53,6 +55,10 @@ indicator calculated by summary_fn}
 
 \item{summary_fn}{function to calculate a summary indicator. Must receive
 one numeric vector and return a numeric vector of length 1}
+
+\item{yaxis_title}{character vector length 1}
+
+\item{xaxis_title}{character vector length 1}
 
 \item{plotly}{whether to convert it to an interactive plot using plotly}
 }
