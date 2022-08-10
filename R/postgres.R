@@ -158,8 +158,6 @@ pg_copy_file <- function(
   dplyr::tbl(con, table)
 }
 
-
-
 #' Compose a SQL query to create a table in a Postgres database, matching
 #' the data in a text file
 #'
@@ -417,9 +415,9 @@ pg_create_foreign_table <- function(
     );"
   )
 
+  cat("\n", create_table_sql, "\n")
   if (isTRUE(execute)) {
     cat("Executing SQL statement...\n")
-    cat(create_table_sql)
     DBI::dbExecute(con, create_table_sql)
   }
 
