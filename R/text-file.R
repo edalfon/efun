@@ -11,7 +11,7 @@
 #' @export
 file_head <- function(file_path, n = 10, one_string = TRUE) {
 
-  args <- glue::glue("Get-Content {file_path} -head {n}")
+  args <- glue::glue('Get-Content "{normalizePath(file_path)}" -head {n}')
   # lines <- system2("powershell", args = args, stdout = TRUE, stderr = TRUE)
   # although add dependency, sys is faster..., relevantly faster for many lines
   res <- sys::exec_internal("powershell", args = args)
@@ -35,7 +35,7 @@ file_head <- function(file_path, n = 10, one_string = TRUE) {
 #' @export
 file_tail <- function(file_path, n = 10, one_string = TRUE) {
 
-  args <- glue::glue("Get-Content {file_path} -tail {n}")
+  args <- glue::glue('Get-Content "{normalizePath(file_path)}" -tail {n}')
   res <- sys::exec_internal("powershell", args = args)
   lines <- sys::as_text(res$stdout)
   if (isTRUE(one_string)) {
