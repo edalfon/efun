@@ -544,3 +544,50 @@ are_paired <- function (df, ...) {
   print(nuniq_each)
   any(nuniq_each == nuniq_all)
 }
+
+
+
+#' "Delete by ellipsis" column names, putting the original
+#' column names as a tooltip
+#'
+#' @param data data whose columns will be renamed
+#' @param ellipsis indicator to append to the column names to inducate trunc
+#' @param min_width minimum with to guarantee for the column names
+#'
+#' @return data with new column names
+#' @export
+ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
+
+  min_width <- max(stringr::str_length(ellipsis), min_width)
+
+  col_widths <- data |>
+    dplyr::ungroup() |>
+    dplyr::summarise(dplyr::across(
+      .fns = ~max(min_width, stringr::str_length(.x))
+    ))
+
+  col_names <- names(data)
+
+  col_truncnames <- purrr::map2_chr(
+    .x = col_names,
+    .y = col_widths,
+    .f = ~stringr::str_trunc(
+      string = .x,
+      width = .y,
+      ellipsis = ellipsis
+    )
+  )
+
+  col_tooltipnames <- purrr::map2_chr(
+    .x = col_names,
+    .y = col_truncnames,
+    .f = ~efun:::make_tooltip(
+      text = .y,
+      tooltip = .x
+    )
+  )
+
+  names(data) <- col_tooltipnames
+  data
+}
+
