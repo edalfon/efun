@@ -72,6 +72,7 @@ pg_copy_file <- function(
   header = TRUE,
   na.strings = c("", "NA", "NULL"),
   colClasses = NULL,
+  col.names,
   encoding = "UTF-8",
   ...,
   unlogged = FALSE,
@@ -98,6 +99,7 @@ pg_copy_file <- function(
       header = header,
       na.strings = na.strings,
       colClasses = colClasses,
+      col.names = col.names,
       encoding = encoding,
       ...,
       unlogged = unlogged,
@@ -201,6 +203,7 @@ pg_create_table <- function(
   header = "auto",
   na.strings = c("", "NA", "NULL"),
   colClasses = NULL,
+  col.names,
   encoding = "UTF-8",
   ...,
   unlogged = FALSE,
@@ -217,12 +220,16 @@ pg_create_table <- function(
     # just the first few lines see
     # https://stackoverflow.com/questions/52492986/fread-to-read-top-n-rows-
     # from-a-large-file
-    cmd = glue::glue("powershell Get-content {file_path} -head {nrows}"),
+    # cmd = glue::glue(
+    #   'powershell Get-content "{normalizePath(file_path)}" -head {nrows}'
+    # ),
+    text = efun::file_head(file_path, nrows),
     sep = sep,
     nrows = nrows,
     header = header,
     na.strings = na.strings,
     colClasses = colClasses,
+    col.names = col.names,
     encoding = encoding,
     ...
   )
@@ -318,6 +325,7 @@ pg_create_foreign_table <- function(
   header = TRUE,
   na.strings = c("", "NA", "NULL"),
   colClasses = NULL,
+  col.names,
   encoding = "UTF-8",
   ...,
   drop_table = FALSE,
@@ -340,6 +348,7 @@ pg_create_foreign_table <- function(
     header = header,
     na.strings = na.strings,
     colClasses = colClasses,
+    col.names = col.names,
     encoding = encoding,
     ...,
     drop_table = FALSE, # because drop table != drop foreign table

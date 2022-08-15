@@ -44,6 +44,25 @@ file_tail <- function(file_path, n = 10, one_string = TRUE) {
   lines
 }
 
+#' Glimpse first and last n/2 lines of a file
+#'
+#' And print the lines (using cat)
+#'
+#' @inheritParams file_head
+#'
+#' @return a character vector (length n; if one_string = TRUE, length 1)
+#' @export
+file_glimpse <- function(file_path, n = 14) {
+
+  n_2 <- round(n / 2)
+  cat(
+    file_head(file_path, n = n_2),
+    "...",
+    file_tail(file_path, n = n_2),
+    sep = "\n"
+  )
+}
+
 
 #' Guess data types in a delimited text file (thin wrapper on data.table::fread)
 #'

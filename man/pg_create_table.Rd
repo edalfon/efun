@@ -14,6 +14,7 @@ pg_create_table(
   header = "auto",
   na.strings = c("", "NA", "NULL"),
   colClasses = NULL,
+  col.names,
   encoding = "UTF-8",
   ...,
   unlogged = FALSE,
@@ -49,6 +50,8 @@ given verbatim, e.g. \code{SQL('"my_schema"."table_name"')}
 \item{colClasses}{ As in \code{\link[utils:read.table]{utils::read.csv}}; i.e., an unnamed vector of types corresponding to the columns in the file, or a named vector specifying types for a subset of the columns by name. The default, \code{NULL} means types are inferred from the data in the file. Further, \code{data.table} supports a named \code{list} of vectors of column names \emph{or numbers} where the \code{list} names are the class names; see examples. The \code{list} form makes it easier to set a batch of columns to be a particular class. When column numbers are used in the \code{list} form, they refer to the column number in the file not the column number after \code{select} or \code{drop} has been applied.
     If type coercion results in an error, introduces \code{NA}s, or would result in loss of accuracy, the coercion attempt is aborted for that column with warning and the column's type is left unchanged. If you really desire data loss (e.g. reading \code{3.14} as \code{integer}) you have to truncate such columns afterwards yourself explicitly so that this is clear to future readers of your code.
   }
+
+\item{col.names}{ A vector of optional names for the variables (columns). The default is to use the header column if present or detected, or if not "V" followed by the column number. This is applied after \code{check.names} and before \code{key} and \code{index}. }
 
 \item{encoding}{ default is \code{"unknown"}. Other possible options are \code{"UTF-8"} and \code{"Latin-1"}.  Note: it is not used to re-encode the input, rather enables handling of encoded strings in their native encoding. }
 
