@@ -75,3 +75,24 @@ test_that("summarize_df deals ok with several data.frame examples", {
 })
 
 
+
+
+test_that("filter_duplicates works", {
+
+  expect_error(
+    filter_duplicates(ggplot2::diamonds, by = c("carat", "cut", "price")),
+    regexp = NA
+  )
+
+  expect_error(
+    filter_duplicates_dplyr(ggplot2::diamonds, carat, cut, price),
+    regexp = NA
+  )
+
+  expect_equal(
+    nrow(filter_duplicates(ggplot2::diamonds, by = c("carat", "cut", "price"))),
+    nrow(filter_duplicates_dplyr(ggplot2::diamonds, carat, cut, price))
+  )
+
+
+})

@@ -2,16 +2,19 @@
 % Please edit documentation in R/modemfv.R
 \name{modemfv_vctrs}
 \alias{modemfv_vctrs}
-\title{Title}
+\title{Find the mode in a vector x}
 \usage{
 modemfv_vctrs(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{a vector}
 }
 \value{
-
+object of length 1, the same type as x
 }
 \description{
-Title
+Find the mode in a vector x
+}
+\examples{
+modemfv_vctrs(ggplot2::diamonds$cut)
 }

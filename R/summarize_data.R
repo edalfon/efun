@@ -581,7 +581,7 @@ ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
   col_tooltipnames <- purrr::map2_chr(
     .x = col_names,
     .y = col_truncnames,
-    .f = ~efun:::make_tooltip(
+    .f = ~make_tooltip(
       text = .y,
       tooltip = .x
     )

@@ -2,16 +2,21 @@
 % Please edit documentation in R/modemfv.R
 \name{modemfv}
 \alias{modemfv}
-\title{Title}
+\title{Find the mode in a vector x}
 \usage{
 modemfv(x, na.rm = TRUE)
 }
 \arguments{
-\item{x}{}
+\item{x}{a vector}
+
+\item{na.rm}{logical to indicate if NA should be removed (defaults to TRUE)}
 }
 \value{
-
+object of length 1, the same type as x
 }
 \description{
-Title
+Find the mode in a vector x
+}
+\examples{
+modemfv(ggplot2::diamonds$carat)
 }

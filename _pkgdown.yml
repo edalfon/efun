@@ -89,6 +89,16 @@ reference:
   - pg_exists_table
   - pg_total_relation_size
 
+- title: "Data wrangling helpers"
+  desc: >
+    Common data wrangling tasks
+- contents:
+  - is_unique
+  - filter_duplicates
+  - filter_duplicates_dplyr
+  - modemfv_vctrs
+  - modemfv
+  - are_paired
 
 - title: "Misc"
   desc: >
@@ -97,12 +107,10 @@ reference:
   - attr
   - tab
   - is_invalid_number
-  - is_unique
   - clipboard_readfrom
   - clipboard_writeto
   - memory_use
   - normalize_text
-  - are_paired
   - timestamp_it
   - ellipt_colnames
   - "%#%"

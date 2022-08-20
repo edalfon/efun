@@ -5,7 +5,7 @@
 \title{"Delete by ellipsis" column names, putting the original
 column names as a tooltip}
 \usage{
-ellipt_colnames(data, ellipsis = "", min_width = 2)
+ellipt_colnames(data, ellipsis = "", min_width = 3)
 }
 \arguments{
 \item{data}{data whose columns will be renamed}
