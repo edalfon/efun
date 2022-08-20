@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">efun</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@ approach</p></td>
         </td>
         <td><p>Plot Empirical Cummulative Distribution Function for xvar</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="-knitr-and-r-markdown-helpers">`knitr` and R Markdown helpers <a href="#-knitr-and-r-markdown-helpers" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="-knitr-and-r-markdown-helpers"><code>knitr</code> and R Markdown helpers <a href="#-knitr-and-r-markdown-helpers" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Just little helpers to use in .Rmd files</p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -130,7 +130,7 @@ approach</p></td>
         </td>
         <td><p>Time <code>knitr</code> chunks, by default, all of them</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="-blogdown-helpers">`blogdown` helpers <a href="#-blogdown-helpers" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="-blogdown-helpers"><code>blogdown</code> helpers <a href="#-blogdown-helpers" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Just an RStudio addin to avoid typing <code><a href="https://pkgs.rstudio.com/blogdown/reference/serve_site.html" class="external-link">blogdown::stop_server()</a></code></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -149,6 +149,10 @@ approach</p></td>
           <p><code><a href="file_tail.html">file_tail()</a></code> </p>
         </td>
         <td><p>Glimpse last n lines of a file</p></td>
+      </tr><tr><td>
+          <p><code><a href="file_glimpse.html">file_glimpse()</a></code> </p>
+        </td>
+        <td><p>Glimpse first and last n/2 lines of a file</p></td>
       </tr><tr><td>
           <p><code><a href="guess_types.html">guess_types()</a></code> </p>
         </td>
@@ -179,6 +183,35 @@ the data in a text file</p></td>
         </td>
         <td><p>Query table's size in the Postgres database of given <code>con</code></p></td>
       </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="data-wrangling-helpers">Data wrangling helpers <a href="#data-wrangling-helpers" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Common data wrangling tasks</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="is_unique.html">is_unique()</a></code> </p>
+        </td>
+        <td><p>Check if a variable is unique, i.e., there are as many unique values in the
+object as the total number of values</p></td>
+      </tr><tr><td>
+          <p><code><a href="filter_duplicates.html">filter_duplicates()</a></code> </p>
+        </td>
+        <td><p>Filter duplicated row by the columns indicated in by</p></td>
+      </tr><tr><td>
+          <p><code><a href="filter_duplicates_dplyr.html">filter_duplicates_dplyr()</a></code> </p>
+        </td>
+        <td><p>Filter duplicated row by the columns ...</p></td>
+      </tr><tr><td>
+          <p><code><a href="modemfv_vctrs.html">modemfv_vctrs()</a></code> </p>
+        </td>
+        <td><p>Find the mode in a vector x</p></td>
+      </tr><tr><td>
+          <p><code><a href="modemfv.html">modemfv()</a></code> </p>
+        </td>
+        <td><p>Find the mode in a vector x</p></td>
+      </tr><tr><td>
+          <p><code><a href="are_paired.html">are_paired()</a></code> </p>
+        </td>
+        <td><p>Check if the <code>...</code> columns of the <code>df</code> have a one-to-one relation</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="misc">Misc <a href="#misc" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Miscellaneous functions (within an already miscellaneous package)</p>
         </th>
@@ -194,11 +227,6 @@ the data in a text file</p></td>
           <p><code><a href="is_invalid_number.html">is_invalid_number()</a></code> </p>
         </td>
         <td><p>Test if x is NA, NaN, Inf, -Inf, NULL</p></td>
-      </tr><tr><td>
-          <p><code><a href="is_unique.html">is_unique()</a></code> </p>
-        </td>
-        <td><p>Check if a variable is unique, i.e., there are as many unique values in the
-object as the total number of values</p></td>
       </tr><tr><td>
           <p><code><a href="clipboard_readfrom.html">clipboard_readfrom()</a></code> </p>
         </td>
@@ -216,13 +244,14 @@ object as the total number of values</p></td>
         </td>
         <td><p>Normalize text, removing spaces, common punctuation and non-ascii characters</p></td>
       </tr><tr><td>
-          <p><code><a href="are_paired.html">are_paired()</a></code> </p>
-        </td>
-        <td><p>Check if the <code>...</code> columns of the <code>df</code> have a one-to-one relation</p></td>
-      </tr><tr><td>
           <p><code><a href="timestamp_it.html">timestamp_it()</a></code> </p>
         </td>
         <td><p>Append a timestamp to <code>x</code>, typically a path</p></td>
+      </tr><tr><td>
+          <p><code><a href="ellipt_colnames.html">ellipt_colnames()</a></code> </p>
+        </td>
+        <td><p>"Delete by ellipsis" column names, putting the original
+column names as a tooltip</p></td>
       </tr><tr><td>
           <p><code><a href="grapes-hash-grapes.html">`%#%`</a></code> <code><a href="grapes-hash-grapes.html">`%# %`</a></code> </p>
         </td>
@@ -244,7 +273,7 @@ object as the total number of values</p></td>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

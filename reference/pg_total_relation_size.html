@@ -18,7 +18,7 @@ pg_size_pretty to try and make it human readable directly"><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">efun</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -65,21 +65,28 @@ pg_size_pretty to try and make it human readable directly"><!-- mathjax --><scri
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pg_total_relation_size</span><span class="op">(</span><span class="va">con</span>, <span class="va">table_name</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pg_total_relation_size</span><span class="op">(</span><span class="va">con</span>, <span class="va">table_name</span>, pretty <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>con</dt>
 <dd><p>DBI connection to the database</p></dd>
+
+
 <dt>table_name</dt>
 <dd><p>character with the table name you want to check</p></dd>
+
+
 <dt>pretty</dt>
 <dd><p>logical, if TRUE use <code>pg_size_pretty</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>character if pretty=TRUE, numeric otherwise</p>
+    
+
+<p>character if pretty=TRUE, numeric otherwise</p>
     </div>
 
   </div>
@@ -94,7 +101,7 @@ pg_size_pretty to try and make it human readable directly"><!-- mathjax --><scri
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

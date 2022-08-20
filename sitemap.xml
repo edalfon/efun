@@ -58,10 +58,22 @@
     <loc>https://edalfon.github.io/efun/reference/efun-package.html</loc>
   </url>
   <url>
+    <loc>https://edalfon.github.io/efun/reference/ellipt_colnames.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/file_glimpse.html</loc>
+  </url>
+  <url>
     <loc>https://edalfon.github.io/efun/reference/file_head.html</loc>
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/file_tail.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/filter_duplicates.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/filter_duplicates_dplyr.html</loc>
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/get_breaks.html</loc>
@@ -101,6 +113,12 @@
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/memory_use.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/modemfv.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/modemfv_vctrs.html</loc>
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/normalize_text.html</loc>
