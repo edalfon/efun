@@ -1,4 +1,38 @@
 library(dplyr)
+
+pg_con <- tryCatch({
+
+  # pg_con <- DBI::dbConnect(
+  #   RPostgres::Postgres(),
+  #   dbname  = "efun_pg_tests",
+  #   user = "postgres",
+  #   password = "postgres",
+  #   host = NULL, #,"localhost",
+  #   port = 5432,
+  #   # https://cran.r-project.org/web/packages/DBI/vignettes/spec.html
+  #   bigint = "numeric"
+  # )
+
+  DBI::dbConnect(
+    odbc::odbc(),
+    driver = "PostgreSQL Unicode(x64)",
+    database = "efun_pg_tests",
+    uid = "postgres",
+    pwd = "postgres",
+    # TODO: check this
+    # The defaults should provide reasonable behavior, in particular a local
+    # connection for host = NULL. For some DBMS (e.g., PostgreSQL), this is
+    # different to a TCP/IP connection to localhost.
+    host = NULL, #,"localhost",
+    port = 5432,
+    encoding = "WINDOWS-1252",
+    # https://cran.r-project.org/web/packages/DBI/vignettes/spec.html
+    bigint = "numeric"
+  )
+}, error = function(e) {
+  FALSE
+})
+
 test_that("pg_create_table works", {
 
   skip_on_os(c("mac", "linux", "solaris"))
@@ -62,3 +96,60 @@ test_that("pg_create_table works", {
 
 
 })
+
+
+
+test_that("pg_copy works", {
+
+  skip_on_os(c("mac", "linux", "solaris"))
+
+  testthat::skip_if(isFALSE(pg_con))
+
+  test_csv_path <- test_path("test-data/mtcars.csv")
+
+  expect_error({
+    pg_copy_file(
+      con = pg_con,
+      file_path = test_csv_path,
+      table = "mtcars",
+      sep = ",",
+      create_table = TRUE,
+      drop_table = TRUE
+    )
+  }, regexp = NA)
+
+  expect_equal(
+    object = dplyr::tbl(pg_con, "mtcars") |>
+      count() |>
+      pull(n),
+    expected = nrow(mtcars)
+  )
+
+})
+
+
+
+test_that("pg_copy_data works", {
+
+  skip_on_os(c("mac", "linux", "solaris"))
+
+  testthat::skip_if(isFALSE(pg_con))
+
+
+  expect_error({
+    toy <- pg_copy_data(
+      con = pg_con,
+      data = mtcars,
+      table_name = "newmtcars"
+    )
+  }, regexp = NA)
+
+  expect_equal(
+    object = dplyr::tbl(pg_con, "mtcars") |>
+      count() |>
+      pull(n),
+    expected = nrow(mtcars)
+  )
+
+})
+

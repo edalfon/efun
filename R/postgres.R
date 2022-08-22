@@ -144,15 +144,17 @@ pg_copy_file <- function(
 
     DBI::dbCommit(con)
 
-    cat(paste0(
+    cat(
       "\n",
       scales::comma(rows_copy),
-      " records imported to table ", table, " in the ", con@info$dbname,
-      " database in PostgreSQL\n",
-    ))
-  },
-  error = function(e) DBI::dbRollback(con) %T>% cat("ERROR!, Rolling back...")
-  )
+      " records imported to table '", table, "' in the '", con@info$dbname,
+      "' database in PostgreSQL\n\n",
+      sep = ""
+    )
+  }, error = function(e) {
+    print(e)
+    DBI::dbRollback(con) %T>% cat("ERROR!, Rolling back...")
+  })
 
   tictoc::toc()
   tictoc::toc()
@@ -493,5 +495,76 @@ pg_total_relation_size <- function(con, table_name, pretty = TRUE) {
   size
 }
 
+
+#' List running queries in Postgres
+#'
+#' @param con pg connection
+#'
+#' @return a tibble
+#' @export
+pg_running_queries <- function(con) {
+  tibble::tibble(DBI::dbGetQuery(con, "
+    SELECT pid, age(clock_timestamp(), query_start), usename, query
+    FROM pg_stat_activity
+    WHERE query != '<IDLE>' AND query NOT ILIKE '%pg_stat_activity%'
+    ORDER BY query_start desc;
+  "))
+}
+
+#' Kill a running query in Postgres
+#'
+#' @param con pg connection
+#' @param pid pid of the query to kill
+#'
+#' @return see pg_cancel_backend
+#' @export
+pg_kill_query <- function(con, pid) {
+  tibble::tibble(DBI::dbExecute(con, glue::glue("
+    SELECT pg_cancel_backend({pid});
+  ")))
+}
+
+#' Copy data to a postgres instance
+#'
+#' Hernando, my use case for this is those cases where the data are small
+#' enough to load it in R, but not so small so one can not put up with
+#' a bunch of insert statements (the default when you use dplyr::copy_to())
+#' Sometimes it is more convenient to initially load and wrangle a dataset in R
+#' but when you later need it up in postgres, this is a quick-and-dirty way to
+#' do it (if the data are not just a few rows but millions, it would take
+#' forever to use a bunch of insert statements)
+#'
+#' @param data data to copy to postgres
+#' @inheritParams pg_copy_file
+#'
+#' @return this is used for the side effect
+#' @export
+pg_copy_data <- function(con, data, table_name,
+                         sep = "|",
+                         drop_table = TRUE, create_table = TRUE,
+                         if_not_exists = TRUE,
+                         execute = TRUE) {
+
+  tmp_file <- tempfile("pg_")
+  data.table::fwrite(
+    x = data,
+    file = tmp_file,
+    sep = sep
+  )
+  file_glimpse(tmp_file)
+
+  pg_copy_file(
+    con = con,
+    file_path = tmp_file,
+    table = table_name,
+    sep = sep,
+    nrows = 100,
+    colClasses = purrr::imap_chr(data, ~class(.x)),
+    drop_table = drop_table,
+    create_table = create_table,
+    if_not_exists = if_not_exists,
+    execute = execute
+  )
+}
 
 
