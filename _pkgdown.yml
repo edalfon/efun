@@ -88,6 +88,9 @@ reference:
   - pg_create_foreign_table
   - pg_exists_table
   - pg_total_relation_size
+  - pg_copy_data
+  - pg_kill_query
+  - pg_running_queries
 
 - title: "Data wrangling helpers"
   desc: >

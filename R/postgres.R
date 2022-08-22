@@ -535,6 +535,7 @@ pg_kill_query <- function(con, pid) {
 #' forever to use a bunch of insert statements)
 #'
 #' @param data data to copy to postgres
+#' @param table_name name of the table in postgres
 #' @inheritParams pg_copy_file
 #'
 #' @return this is used for the side effect

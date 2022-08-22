@@ -9,7 +9,7 @@ pg_copy_data(
   data,
   table_name,
   sep = "|",
-  drop_table = FALSE,
+  drop_table = TRUE,
   create_table = TRUE,
   if_not_exists = TRUE,
   execute = TRUE
@@ -19,6 +19,8 @@ pg_copy_data(
 \item{con}{A database connection.}
 
 \item{data}{data to copy to postgres}
+
+\item{table_name}{name of the table in postgres}
 
 \item{sep}{ The separator between columns. Defaults to the character in the set \code{[,\\t |;:]} that separates the sample of rows into the most number of lines with the same number of fields. Use \code{NULL} or \code{""} to specify no separator; i.e. each line a single character column like \code{base::readLines} does.}
 

@@ -1,6 +1,6 @@
 Package: efun
 Title: Miscellaneous Functions by E
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     person(given = "Eduardo",
            family = "Alfonso-Sierra",
@@ -56,7 +56,8 @@ Suggests:
     forcats,
     duckdb,
     withr,
-    dbplyr
+    dbplyr,
+    odbc
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://github.com/edalfon/efun
