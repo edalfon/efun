@@ -1,5 +1,5 @@
 library(dplyr)
-
+# test
 pg_con <- tryCatch({
 
   # pg_con <- DBI::dbConnect(
@@ -150,6 +150,26 @@ test_that("pg_copy_data works", {
       pull(n),
     expected = nrow(mtcars)
   )
+
+})
+
+
+
+test_that("pg_foreign works", {
+
+  skip_on_os(c("mac", "linux", "solaris"))
+
+  testthat::skip_if(isFALSE(pg_con))
+
+  pg_create_foreign_table(
+    con = pg_con,
+    file_path = "D:/I2015_CONT.TXT",
+    table = "year_data",
+    sep = ";",
+    execute = TRUE,
+    if_not_exists = TRUE
+  )
+
 
 })
 
