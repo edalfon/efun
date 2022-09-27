@@ -103,6 +103,21 @@ reference:
   - modemfv
   - are_paired
 
+- title: "Text wrangling helpers"
+  desc: >
+    A few fns to help in processing text data
+- contents:
+  - normalize_text
+  - parse_annotations
+  - parse_single_annotation
+
+- title: "ggplot2 helpers"
+  desc: >
+    Fns to reduce code duplication in writing ggplot2
+- contents:
+  - bar_just
+  - bar_just_facet
+
 - title: "Misc"
   desc: >
     Miscellaneous functions (within an already miscellaneous package)
@@ -113,7 +128,6 @@ reference:
   - clipboard_readfrom
   - clipboard_writeto
   - memory_use
-  - normalize_text
   - timestamp_it
   - ellipt_colnames
   - "%#%"
