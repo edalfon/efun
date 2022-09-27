@@ -34,6 +34,12 @@
     <loc>https://edalfon.github.io/efun/reference/attr.html</loc>
   </url>
   <url>
+    <loc>https://edalfon.github.io/efun/reference/bar_just.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/bar_just_facet.html</loc>
+  </url>
+  <url>
     <loc>https://edalfon.github.io/efun/reference/blogdown_stop_server.html</loc>
   </url>
   <url>
@@ -122,6 +128,12 @@
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/normalize_text.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/parse_annotations.html</loc>
+  </url>
+  <url>
+    <loc>https://edalfon.github.io/efun/reference/parse_single_annotation.html</loc>
   </url>
   <url>
     <loc>https://edalfon.github.io/efun/reference/pg_copy_data.html</loc>
