@@ -81,10 +81,12 @@ We use \code{data.table::fread} to guess the data types in the text files
 \code{fread} detects all controls automatically (e.g. header, sep), but you
 can always pass specific values to override the detection. This is handy,
 for example, to override the type detected for some variables
-(e.g. a numeric value that you would rather keep as a character).\preformatted{colClasses = list(
+(e.g. a numeric value that you would rather keep as a character).
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{colClasses = list(
   character = c("municipality_code", "state_code"),
   double = c("value"),
   integer = c("age")
 )
-}
+}\if{html}{\out{</div>}}
 }
