@@ -130,6 +130,7 @@ reference:
   - memory_use
   - timestamp_it
   - ellipt_colnames
+  - open_file
   - "%#%"
   - "%#_%"
 
