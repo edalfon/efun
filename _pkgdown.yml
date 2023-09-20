@@ -55,6 +55,7 @@ reference:
     Just little helpers to use in .Rmd files
 - contents:
   - time_chunk
+  - duckdb_explain_hook
 
 
 - title: "`blogdown` helpers"
