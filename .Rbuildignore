@@ -1,2 +1,11 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.github
+.radian_profile
+
+# Exclude specified non-standard files and directory
+LICENSE\.md$
+README\.Rmd$
+_pkgdown\.yml$
+^docs$
+

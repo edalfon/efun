@@ -28,18 +28,4 @@ formatted query explanations in knitr documents.
 # you want to override standard printing of sql chunks
 efun::duckdb_explain_hook()
 }
-Now, before running the chunk we want to sets a custom
-printing function for SQL code chunks. It overrides the
-default behavior for rendering SQL code, by setting the
-`sql.print` option of knitr. When you set this, knitr
-will call that function passing the data that results from
-the query and then print the result using cat. Note also
-that we wrap this in code display tags, because when you
-use the sql.print option, knitr will force the results='asis'.
-See line 653 of the sql knitr engine.
-https://github.com/yihui/knitr/blob/master/R/engine.R
-if (!is.null(sql.print)) {
-  options$results = 'asis'
-  cat(sql.print(data))
-}
 }
