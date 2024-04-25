@@ -93,7 +93,13 @@ formatted query explanations in knitr documents.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Simply put this line on the setup chunk of your .Rmd file</span></span></span>
+<span class="r-in"><span><span class="co"># and then set the chunk option `duckdb_explain` to TRUE when</span></span></span>
+<span class="r-in"><span><span class="co"># you want to override standard printing of sql chunks</span></span></span>
+<span class="r-in"><span><span class="fu">efun</span><span class="fu">::</span><span class="fu">duckdb_explain_hook</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+</code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
