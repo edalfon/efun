@@ -2,9 +2,21 @@
 % Please edit documentation in R/summarize_data.R
 \name{get_stats}
 \alias{get_stats}
+\alias{get_stats.default}
+\alias{get_stats.numeric}
+\alias{get_stats.Date}
+\alias{get_stats.POSIXct}
 \title{Calculate several stats for obj}
 \usage{
 get_stats(obj)
+
+\method{get_stats}{default}(obj)
+
+\method{get_stats}{numeric}(obj)
+
+\method{get_stats}{Date}(obj)
+
+\method{get_stats}{POSIXct}(obj)
 }
 \arguments{
 \item{obj}{}

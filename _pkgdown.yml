@@ -124,7 +124,9 @@ reference:
     Miscellaneous functions (within an already miscellaneous package)
 - contents:
   - attr
+  - first_non_null
   - tab
+  - assert
   - is_invalid_number
   - clipboard_readfrom
   - clipboard_writeto

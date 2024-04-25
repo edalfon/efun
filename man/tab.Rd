@@ -9,9 +9,14 @@ tab(vctr, .drop = FALSE)
 \arguments{
 \item{vctr}{a vector to tabulate}
 
-\item{.drop}{For \code{count()}: if \code{FALSE} will include counts for empty groups
-(i.e. for levels of factors that don't exist in the data). Deprecated in
-\code{add_count()} since it didn't actually affect the output.}
+\item{.drop}{Handling of factor levels that don't appear in the data, passed
+on to \code{\link[dplyr:group_by]{group_by()}}.
+
+For \code{count()}: if \code{FALSE} will include counts for empty groups (i.e. for
+levels of factors that don't exist in the data).
+
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} For \code{add_count()}: deprecated since it
+can't actually affect the output.}
 }
 \value{
 tibble with columns value, n, perc

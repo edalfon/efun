@@ -24,7 +24,7 @@ summary of a data.frame, presented in a DataTables (via \code{DT})
 \examples{
 abridge_df(mtcars)
 abridge_df(ggplot2::diamonds)
-nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+nlsw88 <- haven::read_dta("http://www.stata-press.com/data/r15/nlsw88.dta")
 abridge_df(nlsw88)
 abridge_df(forcats::gss_cat)
 }

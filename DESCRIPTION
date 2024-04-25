@@ -1,6 +1,6 @@
 Package: efun
 Title: Miscellaneous Functions by E
-Version: 0.2.3
+Version: 0.3.0
 Authors@R: 
     person(given = "Eduardo",
            family = "Alfonso-Sierra",
@@ -15,7 +15,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.2
+RoxygenNote: 7.3.1
 Imports: 
     magrittr,
     dplyr,
