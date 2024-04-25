@@ -41,7 +41,7 @@ assert <- function(.data, ..., msg = "Assertion does not hold") {
     )
     cat(msg)
 
-    .condition_eval -> NULL
+    NULL -> .condition_eval
     .assert_fails <- dplyr::mutate(.data, .condition_eval = condition_eval)
     if (rlang::is_interactive()) {
       utils::View(.assert_fails) # TODO: should we sample?
