@@ -1,5 +1,3 @@
-
-
 #' Plot Empirical Cummulative Distribution Function for xvar
 #'
 #' @param data data to plot
@@ -23,11 +21,10 @@ ecdfgram <- function(data, xvar, grpvar = NULL,
                      xaxis_title = "",
                      yaxis_title = "Cummulative Frequency",
                      xaxis_format_args = list()) {
-
   NULL -> x_vals
 
-  ecdfgram_data <- get_ecdfgram_data(data, {{xvar}}, {{grpvar}}, trans) |>
-    mutate(text = paste0(
+  ecdfgram_data <- get_ecdfgram_data(data, {{ xvar }}, {{ grpvar }}, trans) |>
+    dplyr::mutate(text = paste0(
       "<b>Cummulative %:</b> %{y} <br>",
       "<b>Value:</b> ", scales::comma(trans$inverse(x_vals))
     ))
@@ -35,7 +32,7 @@ ecdfgram <- function(data, xvar, grpvar = NULL,
   fig <- plotly::plot_ly(data = ecdfgram_data)
 
   if (!missing(grpvar)) {
-    color_grp <- ecdfgram_data |> dplyr::pull({{grpvar}})
+    color_grp <- ecdfgram_data |> dplyr::pull({{ grpvar }})
   } else {
     color_grp <- NULL
   }
@@ -91,23 +88,21 @@ ecdfgram <- function(data, xvar, grpvar = NULL,
 
 get_ecdfgram_data <- function(data, xvar, grpvar = NULL,
                               trans = scales::identity_trans()) {
-
   ecdfgram_data <- data |>
     # we want to have grouping variables as categorical, so if a numeric variable
     # was passed as grpvar, we would rather mutate it to character
     # TODO: check only if it is numeric, so that we do not lose factors,
     # order and so on
-    dplyr::mutate(dplyr::across({{grpvar}}, as.character)) |>
-    dplyr::mutate(dplyr::across({{xvar}}, trans$transform)) |>
-    dplyr::group_by({{grpvar}}) |>
-    dplyr::summarise(
-      x_vals = stats::knots(stats::ecdf({{xvar}})),
-      y_vals = stats::ecdf({{xvar}})(
-        stats::knots(stats::ecdf({{xvar}}))
+    dplyr::mutate(dplyr::across({{ grpvar }}, as.character)) |>
+    dplyr::mutate(dplyr::across({{ xvar }}, trans$transform)) |>
+    dplyr::group_by({{ grpvar }}) |>
+    dplyr::reframe(
+      x_vals = stats::knots(stats::ecdf({{ xvar }})),
+      y_vals = stats::ecdf({{ xvar }})(
+        stats::knots(stats::ecdf({{ xvar }}))
       )
     ) |>
     dplyr::ungroup()
 
   ecdfgram_data
 }
-

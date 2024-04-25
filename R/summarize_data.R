@@ -19,8 +19,7 @@ utils::globalVariables(c("value", "perc"))
 #' @examples
 #' summarize_df(mtcars)
 summarize_df <- function(df) {
-
-  if(!("data.frame" %in% class(df))) {
+  if (!("data.frame" %in% class(df))) {
     warning("This function only supports data.frame-like objects")
   }
 
@@ -46,10 +45,9 @@ summarize_df <- function(df) {
 #' summarize_obj(letters)
 #' summarize_obj(runif(100))
 summarize_obj <- function(obj, n_top = 7) {
-
   NULL -> key -> count -> count_p -> top_str -> rowname -> .
 
-  if("list" %in% class(obj) | "data.frame" %in% class(obj)){
+  if ("list" %in% class(obj) | "data.frame" %in% class(obj)) {
     warning("summarize_obj does not support '", class(obj), "' objects")
   }
 
@@ -62,7 +60,9 @@ summarize_obj <- function(obj, n_top = 7) {
 
   n_obj <- length(obj)
 
-  n_na <- freq_table %>% filter(is_invalid_number(key)) %>% pull(count)
+  n_na <- freq_table %>%
+    filter(is_invalid_number(key)) %>%
+    pull(count)
   n_na <- ifelse(length(n_na) == 0, 0, sum(n_na))
   p_na <- n_na / n_obj
 
@@ -85,7 +85,7 @@ summarize_obj <- function(obj, n_top = 7) {
 
   obj_hist <- numeric(0)
   if (inherits(obj, c("numeric", "integer", "Date")) &
-      !all(is_invalid_number(obj)) ) {
+    !all(is_invalid_number(obj))) {
     obj_hist <- graphics::hist.default(as.numeric(obj), plot = FALSE)$counts
   } else {
     # this is very much adhoc, it is ugly and looks kinda hacky, but, it is way
@@ -154,16 +154,20 @@ get_stats <- function(obj) {
   UseMethod("get_stats", obj)
 }
 
+#' @export
+#' @rdname get_stats
 get_stats.default <- function(obj) {
-
-  num_stats <- c(mean = NA, sd = NA, min = NA, q25 = NA, median = NA,
-                 q75 = NA, max = NA)
+  num_stats <- c(
+    mean = NA, sd = NA, min = NA, q25 = NA, median = NA,
+    q75 = NA, max = NA
+  )
 
   num_stats
 }
 
+#' @export
+#' @rdname get_stats
 get_stats.numeric <- function(obj) {
-
   num_stats <- c(
     mean(obj, na.rm = TRUE),
     stats::sd(obj, na.rm = TRUE),
@@ -171,13 +175,14 @@ get_stats.numeric <- function(obj) {
   ) %>%
     magrittr::set_names(names(get_stats.default())) %>%
     scales::comma(accuracy = NULL)
-    # controversial?, make it all string to enable different data types formatting
+  # controversial?, make it all string to enable different data types formatting
 
   num_stats
 }
 
+#' @export
+#' @rdname get_stats
 get_stats.Date <- function(obj) {
-
   num_stats <- c(
     mean(obj, na.rm = TRUE) %>%
       format.Date(format = "%Y-%m-%d"),
@@ -190,8 +195,9 @@ get_stats.Date <- function(obj) {
   num_stats
 }
 
+#' @export
+#' @rdname get_stats
 get_stats.POSIXct <- function(obj) {
-
   num_stats <- c(
     mean(obj, na.rm = TRUE) %>%
       format.POSIXct(),
@@ -214,7 +220,7 @@ get_stats.POSIXct <- function(obj) {
 
 #' @keywords internal
 make_tooltip <- function(text, tooltip) {
-  paste0("<span title='", tooltip, "'>", text,"</span>")
+  paste0("<span title='", tooltip, "'>", text, "</span>")
 }
 
 #' Where we make a mess
@@ -233,7 +239,6 @@ make_tooltip <- function(text, tooltip) {
 #' @param top_k X, a number indicating the top
 #' @keywords internal
 make_mix <- function(stat_var, top_key, top_count, top_count_p, top_k) {
-
   text <- case_when(
     !is.na(stat_var) ~ paste0("<b>", stat_var, "</b>"),
     is.na(stat_var) & !is.na(top_count) ~ paste0(
@@ -248,7 +253,7 @@ make_mix <- function(stat_var, top_key, top_count, top_count_p, top_k) {
 
   tooltip <- case_when(
     !is.na(top_count) ~ paste0(
-      "Top ", top_k,":\n\n",
+      "Top ", top_k, ":\n\n",
       top_key, "\n",
       scales::comma(top_count, accuracy = 1), " [",
       scales::percent(top_count_p, accuracy = 0.1), "]"
@@ -277,11 +282,10 @@ make_mix <- function(stat_var, top_key, top_count, top_count_p, top_k) {
 #' @examples
 #' abridge_df(mtcars)
 #' abridge_df(ggplot2::diamonds)
-#' nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+#' nlsw88 <- haven::read_dta("http://www.stata-press.com/data/r15/nlsw88.dta")
 #' abridge_df(nlsw88)
 #' abridge_df(forcats::gss_cat)
 abridge_df <- function(df, file = NULL, ...) {
-
   data_name <- deparse(substitute(df))
 
   summary_df <- summarize_df(df)
@@ -318,7 +322,6 @@ abridge_df <- function(df, file = NULL, ...) {
 #' @md
 #' @keywords internal
 visualize_summary <- function(summary_df) {
-
   NULL -> n_na -> n_uniq -> obj_class -> obj_hist -> obj_label ->
   obj_type -> p_na -> p_uniq -> q25 -> q75 -> median -> sd -> st1 -> st2 ->
   st3 -> st4 -> st5 -> st6 -> st7 -> top1_count -> top1_count_p ->
@@ -337,16 +340,17 @@ visualize_summary <- function(summary_df) {
       stringr::str_trunc(obj_class, 14),
       paste0("class:\n", obj_class, "\n\ntypeof:\n", obj_type, "")
     )) %>%
-    mutate(st1 = make_mix(mean,   top1_key, top1_count, top1_count_p, 1)) %>%
-    mutate(st2 = make_mix(sd,     top2_key, top2_count, top2_count_p, 2)) %>%
-    mutate(st3 = make_mix(min,    top3_key, top3_count, top3_count_p, 3)) %>%
-    mutate(st4 = make_mix(q25,    top4_key, top4_count, top4_count_p, 4)) %>%
+    mutate(st1 = make_mix(mean, top1_key, top1_count, top1_count_p, 1)) %>%
+    mutate(st2 = make_mix(sd, top2_key, top2_count, top2_count_p, 2)) %>%
+    mutate(st3 = make_mix(min, top3_key, top3_count, top3_count_p, 3)) %>%
+    mutate(st4 = make_mix(q25, top4_key, top4_count, top4_count_p, 4)) %>%
     mutate(st5 = make_mix(median, top5_key, top5_count, top5_count_p, 5)) %>%
-    mutate(st6 = make_mix(q75,    top6_key, top6_count, top6_count_p, 6)) %>%
-    mutate(st7 = make_mix(max,    top7_key, top7_count, top7_count_p, 7)) %>%
+    mutate(st6 = make_mix(q75, top6_key, top6_count, top6_count_p, 6)) %>%
+    mutate(st7 = make_mix(max, top7_key, top7_count, top7_count_p, 7)) %>%
     rowwise() %>%
     mutate(Hist = sparkline::spk_chr(
-      obj_hist, type = "bar", zeroColor = "#ffffff", chartRangeMin = "0",
+      obj_hist,
+      type = "bar", zeroColor = "#ffffff", chartRangeMin = "0",
       barColor = ifelse(!is.na(mean), "#3366cc", "#00ff7f")
     )) %>%
     select(
@@ -390,7 +394,7 @@ visualize_summary <- function(summary_df) {
       options = list(
         pageLength = -1,
         info = FALSE,
-        lengthMenu = list(c(-1, 10, 25, 50), c("All", "10", "25", "50")) ,
+        lengthMenu = list(c(-1, 10, 25, 50), c("All", "10", "25", "50")),
         fixedHeader = TRUE,
         columnDefs = list(list(orderable = TRUE, targets = 0:14)),
         initComplete = DT::JS(paste0(
@@ -401,8 +405,8 @@ visualize_summary <- function(summary_df) {
     ) %>%
     DT::formatRound(c(3, 5), digits = 0) %>%
     DT::formatPercentage(c(4, 6), digits = 1) %>%
-    DT::formatStyle(columns = 0:13, `font-size` = '14px') %>%
-    DT::formatStyle(columns = c(0, 7:13), `text-align` = 'center') %>%
+    DT::formatStyle(columns = 0:13, `font-size` = "14px") %>%
+    DT::formatStyle(columns = c(0, 7:13), `text-align` = "center") %>%
     DT::formatStyle(
       columns = 3, # NA count
       background = DT::styleColorBar(summary_df$n_na, "red")
@@ -458,10 +462,10 @@ visualize_summary <- function(summary_df) {
 #'   levels = c(LETTERS[1:5], "Levels", "not present", "in data")
 #' )
 #' tab(vctr)
-tab <- function(vctr, .drop = FALSE){
+tab <- function(vctr, .drop = FALSE) {
   tibble::tibble(value = vctr) %>%
     count(value, sort = TRUE, .drop = .drop) %>%
-    mutate(perc = n/sum(n, na.rm = TRUE)) %>%
+    mutate(perc = n / sum(n, na.rm = TRUE)) %>%
     mutate(
       n = formattable::comma(n, digits = 0),
       perc = formattable::percent(perc, digits = 1)
@@ -479,7 +483,7 @@ tab2 <- function(vct) {
   data.frame(
     value = names(vct_table),
     freq = formattable::comma(freq, digits = 0),
-    perc = formattable::percent(freq/sum(freq), digits = 1)
+    perc = formattable::percent(freq / sum(freq), digits = 1)
   )
 }
 
@@ -492,7 +496,7 @@ tab2 <- function(vct) {
 #' @export
 #' @examples
 #' is_unique(1:7)
-is_unique <- function (obj) {
+is_unique <- function(obj) {
   n_all <- length(obj)
   n_unique <- length(unique(obj))
   cat(n_unique, "unique values\n")
@@ -523,8 +527,7 @@ is_unique <- function (obj) {
 #' @examples
 #' are_paired(mtcars)
 #' are_paired(mtcars, mpg, cyl)
-are_paired <- function (df, ...) {
-
+are_paired <- function(df, ...) {
   if (rlang::dots_n(...) > 0) {
     df <- dplyr::select(df, ...)
   }
@@ -557,13 +560,12 @@ are_paired <- function (df, ...) {
 #' @return data with new column names
 #' @export
 ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
-
   min_width <- max(stringr::str_length(ellipsis), min_width)
 
   col_widths <- data |>
     dplyr::ungroup() |>
     dplyr::summarise(dplyr::across(
-      .fns = ~max(min_width, stringr::str_length(.x))
+      .fns = ~ max(min_width, stringr::str_length(.x))
     ))
 
   col_names <- names(data)
@@ -571,7 +573,7 @@ ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
   col_truncnames <- purrr::map2_chr(
     .x = col_names,
     .y = col_widths,
-    .f = ~stringr::str_trunc(
+    .f = ~ stringr::str_trunc(
       string = .x,
       width = .y,
       ellipsis = ellipsis
@@ -581,7 +583,7 @@ ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
   col_tooltipnames <- purrr::map2_chr(
     .x = col_names,
     .y = col_truncnames,
-    .f = ~make_tooltip(
+    .f = ~ make_tooltip(
       text = .y,
       tooltip = .x
     )
@@ -590,4 +592,3 @@ ellipt_colnames <- function(data, ellipsis = "", min_width = 3) {
   names(data) <- col_tooltipnames
   data
 }
-

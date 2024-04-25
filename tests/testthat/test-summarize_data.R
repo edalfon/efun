@@ -1,5 +1,4 @@
 test_that("summarize_obj returns a 1-row tibble", {
-
   obj_summary <- summarize_obj(letters)
   expect_true(inherits(obj_summary, c("tbl_df", "data.frame")))
   expect_equal(nrow(obj_summary), 1)
@@ -24,18 +23,17 @@ test_that("summarize_obj can handle dates", {
 
 test_that("summarize_obj can handle NAs, Inf, NaN vectors", {
   # taking examples from as.Date
-  x <- c(1/0, 1/0, 1/0, 1/0, 1/0, 1/0, 1/0, 1/0, 1/0, 1/0)
+  x <- c(1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0, 1 / 0)
   obj_summary <- summarize_obj(x)
   expect_equal(obj_summary$n_na, length(x))
 
-  x <- as.numeric(letters)
+  x <- as.numeric(letters) |> suppressWarnings()
   obj_summary <- summarize_obj(x)
   expect_equal(obj_summary$n_na, length(x))
 })
 
 
 test_that("summarize_df deals ok with several data.frame examples", {
-
   test_suite <- function(tdf) {
     summdf <- summarize_df(tdf)
     # summary data.frame should have as many row as columns has the original df
@@ -55,7 +53,7 @@ test_that("summarize_df deals ok with several data.frame examples", {
   test_suite(datasets::iris)
   test_suite(ggplot2::diamonds)
   test_suite(lakers_plus) # a df with dates and date time vars
-  #test_suite(tdf <- data.frame()) # edge case, an empty df
+  # test_suite(tdf <- data.frame()) # edge case, an empty df
 
   # haven imported data examples from this post
   # https://josiahparry.com/post/2019-12-14-spss-haven/
@@ -71,14 +69,12 @@ test_that("summarize_df deals ok with several data.frame examples", {
   #
   # nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
   # test_suite(nlsw88)
-
 })
 
 
 
 
 test_that("filter_duplicates works", {
-
   expect_error(
     filter_duplicates(ggplot2::diamonds, by = c("carat", "cut", "price")),
     regexp = NA
@@ -93,6 +89,4 @@ test_that("filter_duplicates works", {
     nrow(filter_duplicates(ggplot2::diamonds, by = c("carat", "cut", "price"))),
     nrow(filter_duplicates_dplyr(ggplot2::diamonds, carat, cut, price))
   )
-
-
 })
