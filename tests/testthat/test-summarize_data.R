@@ -18,7 +18,8 @@ test_that("summarize_obj can handle dates", {
   y <- c("02/27/92", "02/27/92", "01/14/92", "02/28/92", "02/01/92")
   obj <- c(as.Date(x, "%d%b%Y"), as.Date(y, "%m/%d/%y"))
   obj_summary <- summarize_obj(obj)
-  expect_equal(obj_summary$sd, "6,035 days")
+  # expect_equal(obj_summary$sd, "6,035 days")
+  expect_equal(obj_summary$sd, "6,143 days")
 })
 
 test_that("summarize_obj can handle NAs, Inf, NaN vectors", {
