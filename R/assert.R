@@ -28,6 +28,10 @@
 #'
 #' @export
 assert <- function(.data, ..., msg = "Assertion does not hold") {
+  # TODO: change this old approach and embrace more dplyr by something like
+  # abcd <- dplyr::mutate(.data, ...)
+  # and then just extract the evaluated conditions to report. This also
+  # allows multiple conditions, unlike the original approach
   condition_eval <- with(.data, ...)
   if (all(condition_eval)) {
     return(.data)
@@ -42,7 +46,10 @@ assert <- function(.data, ..., msg = "Assertion does not hold") {
     cat(msg)
 
     NULL -> .condition_eval
-    .assert_fails <- dplyr::mutate(.data, .condition_eval = condition_eval)
+    .assert_fails <- dplyr::mutate(
+      .data |> dplyr::ungroup(),
+      .condition_eval = condition_eval
+    )
     if (rlang::is_interactive()) {
       utils::View(.assert_fails) # TODO: should we sample?
     } else {
