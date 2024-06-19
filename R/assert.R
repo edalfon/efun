@@ -27,36 +27,32 @@
 #'   is thrown.
 #'
 #' @export
-assert <- function(.data, ..., msg = "Assertion does not hold") {
-  # TODO: change this old approach and embrace more dplyr by something like
-  # abcd <- dplyr::mutate(.data, ...)
-  # and then just extract the evaluated conditions to report. This also
-  # allows multiple conditions, unlike the original approach
-  condition_eval <- with(.data, ...)
-  if (all(condition_eval)) {
+assert <- function(.data, ..., msg = "Assertion does not hold", na.rm = TRUE) {
+  conds <- rlang::enquos(..., .named = TRUE)
+  conds_eval <- purrr::imap(conds, \(x, idx) rlang::eval_tidy(x, data = .data))
+
+  if (all(purrr::map_lgl(conds_eval, \(x) all(x, na.rm = TRUE)))) {
     return(.data)
   } else {
-    msg <- paste0(
-      msg, ": `", deparse(substitute(...)), "` is false ",
-      sum(!condition_eval),
-      " out of ", length(condition_eval), " times (",
-      sprintf("%.1f%%", 100 * sum(!condition_eval) / length(condition_eval)),
-      ")\n"
-    )
-    cat(msg)
+    fail_msg <- purrr::imap(conds_eval, \(x, idx) {
+      n_fail <- sum(!x)
+      if (n_fail > 0) {
+        paste0(
+          "\t`", idx, "` is false ",
+          n_fail, " out of ", length(x), " times (",
+          sprintf("%.1f%%", 100 * n_fail / length(x)), ")\n"
+        )
+      }
+    }) |> purrr::compact() # we wanto to get rid of NULL, als error msg
 
-    NULL -> .condition_eval
-    .assert_fails <- dplyr::mutate(
-      .data |> dplyr::ungroup(),
-      .condition_eval = condition_eval
-    )
+    .assert_fails <- dplyr::mutate(.data, ...)
     if (rlang::is_interactive()) {
       utils::View(.assert_fails) # TODO: should we sample?
     } else {
       .assert_fails |>
-        dplyr::filter(!.condition_eval) |>
+        # dplyr::filter(!.condition_eval) |> # TODO: should we keep filtering?
         print() # TODO: should we sample?, or just rely on tibble's print?
     }
-    stop(msg)
+    stop(msg, "\n", fail_msg)
   }
 }
