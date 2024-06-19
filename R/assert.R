@@ -21,7 +21,9 @@
 #' @param .data A data frame containing the variables used in the conditions.
 #' @param ... One or more expressions to be evaluated within the data frame.
 #' @param msg A character vector specifying the message to include in the error
-#'   message if the assertion fails.
+#'            message if the assertion fails.
+#' @param na.rm passed to `all()`: logical. If true NA values are removed
+#'              before the result is computed.
 #'
 #' @return The data frame `.data` if all conditions are met. Otherwise, an error
 #'   is thrown.
