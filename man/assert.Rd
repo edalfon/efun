@@ -4,7 +4,7 @@
 \alias{assert}
 \title{Assert a condition within a data frame}
 \usage{
-assert(.data, ..., msg = "Assertion does not hold")
+assert(.data, ..., msg = "Assertion does not hold", na.rm = TRUE)
 }
 \arguments{
 \item{.data}{A data frame containing the variables used in the conditions.}
@@ -13,6 +13,9 @@ assert(.data, ..., msg = "Assertion does not hold")
 
 \item{msg}{A character vector specifying the message to include in the error
 message if the assertion fails.}
+
+\item{na.rm}{passed to \code{all()}: logical. If true NA values are removed
+before the result is computed.}
 }
 \value{
 The data frame \code{.data} if all conditions are met. Otherwise, an error
