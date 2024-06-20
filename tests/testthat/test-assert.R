@@ -17,6 +17,12 @@ test_that("assert() does not fail testing data with NAs", {
       dplyr::mutate(mpg = dplyr::na_if(mpg, 15)) |>
       assert(mpg > 10)
   )
+  expect_error(
+    object = mtcars |>
+      dplyr::mutate(mpg = dplyr::na_if(mpg, 15)) |>
+      assert(mpg > 10, !is.na(mpg)),
+    regexp = "Assertion does not hold"
+  )
 })
 
 test_that("assert() can handle multiple conditions", {
