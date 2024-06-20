@@ -37,7 +37,8 @@ assert <- function(.data, ..., msg = "Assertion does not hold", na.rm = TRUE) {
     return(.data)
   } else {
     fail_msg <- purrr::imap(conds_eval, \(x, idx) {
-      n_fail <- sum(!x)
+      n_fail <- sum(!x, na.rm = na.rm)
+
       if (n_fail > 0) {
         paste0(
           "\t`", idx, "` is false ",
