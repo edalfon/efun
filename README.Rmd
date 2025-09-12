@@ -31,20 +31,20 @@ Most functions do not have much guardrails, though.
 You can install from Github:
 
 ``` r
-remotes::install_packages_github("edalfon/efun")
+remotes::install_github("edalfon/efun")
 ```
 
 ## Example
 
 ```{r include=FALSE}
 temp_html <- tempfile(fileext = ".html")
-nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+nlsw88 <- haven::read_dta("http://www.stata-press.com/data/r15/nlsw88.dta")
 dt_widget <- efun::abridge_df(nlsw88, file = temp_html)
 webshot::webshot(temp_html, file = "man/figures/README-abdridge.png")
 ```
 
 ```{r eval=FALSE}
-nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+nlsw88 <- haven::read_dta("http://www.stata-press.com/data/r15/nlsw88.dta")
 efun::abridge_df(nlsw88)
 ```
 

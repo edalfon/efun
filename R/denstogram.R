@@ -145,7 +145,7 @@ denstogram <- function(
         show.legend = FALSE
       )
     ) +
-    theme_bw() +
+    # theme_bw() +
     scale_y_continuous(
       yaxis_title,
       breaks = 0,

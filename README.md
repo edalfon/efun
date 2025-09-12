@@ -21,13 +21,13 @@ Most functions do not have much guardrails, though.
 You can install from Github:
 
 ``` r
-remotes::install_packages_github("edalfon/efun")
+remotes::install_github("edalfon/efun")
 ```
 
 ## Example
 
 ``` r
-nlsw88 <- haven::read_dta('http://www.stata-press.com/data/r15/nlsw88.dta')
+nlsw88 <- haven::read_dta("http://www.stata-press.com/data/r15/nlsw88.dta")
 efun::abridge_df(nlsw88)
 ```
 
