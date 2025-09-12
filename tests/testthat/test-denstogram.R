@@ -1,6 +1,4 @@
 test_that("denstogram do not fail", {
-
-
   # This error is trigerred because fillvar has values with cardinality 1
   # and then density fails because cannot calculate it for a sample size of 1
   # TODO: check that and provide more informative error message?
@@ -20,16 +18,16 @@ test_that("denstogram do not fail", {
   )
 
   # Testing that the basic summary works
-  expect_error({
-    denstogram(
-      data = ggplot2::diamonds,
-      xvar = price,
-      facets_rows = color,
-      summary_geom = "both",
-      summary_fn = mean
-    )
-  }, regexp = NA) # If NA, asserts that there should be no errors.
-
-
-
+  expect_error(
+    {
+      denstogram(
+        data = ggplot2::diamonds,
+        xvar = price,
+        facets_rows = color,
+        summary_geom = "both",
+        summary_fn = mean
+      )
+    },
+    regexp = NA
+  ) # If NA, asserts that there should be no errors.
 })

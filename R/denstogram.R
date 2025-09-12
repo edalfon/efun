@@ -64,18 +64,27 @@ denstogram <- function(
   trans = scales::identity_trans(),
   probs = c(0, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 1),
   na.rm = TRUE,
+  alpha = 0.7,
+  color = NA,
+  fill = "#00AFBB",
   summary_geom = c("none", "line", "text", "both"),
   summary_fn = function(x) stats::median(x, na.rm = na.rm),
   yaxis_title = "Density",
   xaxis_title = "",
   plotly = TRUE
 ) {
-
   facets_grid_wrap <- match.arg(facets_grid_wrap)
   summary_geom <- match.arg(summary_geom)
 
-  if (missing(fillvar) & missing(facets_rows) & missing(facets_cols)) {
+  data <- data |>
+    # Need to discretize fillvar grouping variables passed as numeric,
+    # so that the legend and color work
+    dplyr::mutate(dplyr::across(
+      .cols = {{ fillvar }}, #& tidyselect:::where(is.numeric),
+      .fns = as.character
+    ))
 
+  if (missing(fillvar) & missing(facets_rows) & missing(facets_cols)) {
     density_xvar <- denstogram_data(dplyr::pull(data, {{ xvar }}), trans, na.rm)
 
     summ_xvar <- data.frame(
@@ -83,32 +92,25 @@ denstogram <- function(
         trans$transform() |>
         summary_fn()
     )
-
   } else {
-
     density_xvar <- data %>%
-      group_by({{facets_rows}}, {{facets_cols}}, {{fillvar}}) %>%
+      group_by({{ facets_rows }}, {{ facets_cols }}, {{ fillvar }}) %>%
       # TODO: update code to use new functions in dplyr.
       #       do() is superseded as of dplyr 1.0.0
       dplyr::do(denstogram_data(
-        xvar = dplyr::pull(., {{ xvar }}), trans = trans, na.rm = na.rm
+        xvar = dplyr::pull(., {{ xvar }}),
+        trans = trans,
+        na.rm = na.rm
       )) %>%
-      ungroup() |>
-      # Need to discretize fillvar grouping variables passed as numeric,
-      # so that the legend and color work
-      dplyr::mutate(dplyr::across(
-        .cols = {{fillvar}}, #& tidyselect:::where(is.numeric),
-        .fns = as.character
-      ))
+      ungroup()
 
     summ_xvar <- data |>
-      group_by({{facets_rows}}, {{facets_cols}}, {{fillvar}}) %>%
+      group_by({{ facets_rows }}, {{ facets_cols }}, {{ fillvar }}) %>%
       dplyr::summarise(summ_xvar = trans$transform(summary_fn({{ xvar }})))
   }
 
   # build info
   # TODO: make sure it shows until max and min
-  # TODO: include number of observations
   # TODO: atomatic decimals f needed, or the full nuber for the max and min
 
   custom_breaks <- data %>%
@@ -126,10 +128,29 @@ denstogram <- function(
     )
   }
 
-  ggpob <- ggplot2::ggplot(density_xvar, aes(x = x, y = y, label = Info)) +
+  ggpob <- ggplot2::ggplot(data, ggplot2::aes(x = {{ xvar }})) +
+    suppressWarnings(
+      ggplot2::geom_point(
+        data = density_xvar,
+        aes(
+          x = x,
+          y = y,
+          label = Info,
+          #group = {{ fillvar }},
+          #color = {{ fillvar }},
+          fill = {{ fillvar }},
+        ),
+        alpha = 0,
+        size = 0,
+        show.legend = FALSE
+      )
+    ) +
     theme_bw() +
-    scale_y_continuous(yaxis_title, breaks = 0,
-                       expand = expansion(mult = c(0, .05))) +
+    scale_y_continuous(
+      yaxis_title,
+      breaks = 0,
+      #expand = expansion(mult = c(0, .05))
+    ) +
     scale_x_continuous(
       xaxis_title,
       labels = denstogram_breakslabels,
@@ -140,37 +161,42 @@ denstogram <- function(
 
   if (missing(fillvar)) {
     ggpob <- ggpob +
-      ggplot2::geom_area(fill = "blue", alpha = 0.5)
+      ggplot2::geom_density(
+        fill = fill,
+        alpha = alpha,
+        color = color,
+        na.rm = na.rm
+      )
   } else if (!missing(fillvar)) {
     ggpob <- ggpob +
-      ggplot2::geom_area(aes(
-        fill = {{ fillvar }},
-        group = {{ fillvar }}
-      ),
-      alpha = 0.5
+      ggplot2::geom_density(
+        ggplot2::aes(
+          fill = {{ fillvar }},
+          #color = {{ color }},
+          #group = {{ fillvar }}
+        ),
+        alpha = alpha,
+        na.rm = na.rm,
+        color = color
       )
   }
 
   if (!missing(facets_rows) | !missing(facets_cols)) {
-
     if (facets_grid_wrap == "grid") {
-
-      ggpob <- ggpob + ggplot2::facet_grid(
-        rows = vars({{facets_rows}}),
-        cols = vars({{facets_cols}}),
-        scales = facets_scales
-      )
-
-    }
-    else {
-
-      ggpob <- ggpob + ggplot2::facet_wrap(
-        facets = vars({{facets_rows}}, {{facets_cols}}),
-        ncol = facets_ncol,
-        nrow = facets_nrow,
-        scales = facets_scales
-      )
-
+      ggpob <- ggpob +
+        ggplot2::facet_grid(
+          rows = vars({{ facets_rows }}),
+          cols = vars({{ facets_cols }}),
+          scales = facets_scales
+        )
+    } else {
+      ggpob <- ggpob +
+        ggplot2::facet_wrap(
+          facets = vars({{ facets_rows }}, {{ facets_cols }}),
+          ncol = facets_ncol,
+          nrow = facets_nrow,
+          scales = facets_scales
+        )
     }
   }
 
@@ -186,8 +212,11 @@ denstogram <- function(
     ggpob <- ggpob +
       ggplot2::geom_text(
         data = summ_xvar,
-        aes(label = scales::comma(trans$inverse(summ_xvar)),
-            y = 0, x = summ_xvar),
+        aes(
+          label = scales::comma(trans$inverse(summ_xvar)),
+          y = 0,
+          x = summ_xvar
+        ),
         #fontface = "bold",
         vjust = -0.1,
         hjust = -0.1
@@ -195,19 +224,23 @@ denstogram <- function(
   }
 
   if (plotly) {
-    ggpob <- plotly::ggplotly(ggpob,
+    ggpob <- plotly::ggplotly(
+      ggpob,
       tooltip = c("label", "fill"),
       dynamicTicks = FALSE
-    ) %>% plotly::style(textposition = "top right")
+    ) %>%
+      plotly::style(textposition = "top right")
   }
 
   ggpob
 }
 
 
-denstogram_data <- function(xvar, trans = scales::identity_trans(),
-                            na.rm = TRUE) {
-
+denstogram_data <- function(
+  xvar,
+  trans = scales::identity_trans(),
+  na.rm = TRUE
+) {
   NULL -> nobs
 
   density_xvar <- xvar %>%
@@ -222,13 +255,19 @@ denstogram_data <- function(xvar, trans = scales::identity_trans(),
     mutate(x_original = trans$inverse(x)) %>%
     mutate(frac = xvar_ecdf(x_original)) %>%
     mutate(nobs = frac * length(xvar)) %>%
-    mutate(Info = paste0(
-      " \n ",
-      "x: ", scales::comma(x_original, accuracy = .01),
-      " \n ",
-      "n: ", scales::comma(nobs, accuracy = 1), " [",
-      scales::percent(frac, accuracy = .1), "]"
-    ))
+    mutate(
+      Info = paste0(
+        " \n ",
+        "x: ",
+        scales::comma(x_original, accuracy = .01),
+        " \n ",
+        "n: ",
+        scales::comma(nobs, accuracy = 1),
+        " [",
+        scales::percent(frac, accuracy = .1),
+        "]"
+      )
+    )
 
   density_xvar
 }
