@@ -84,8 +84,10 @@ summarize_obj <- function(obj, n_top = 7) {
   num_stats <- get_stats(obj)
 
   obj_hist <- numeric(0)
-  if (inherits(obj, c("numeric", "integer", "Date")) &
-    !all(is_invalid_number(obj))) {
+  if (
+    inherits(obj, c("numeric", "integer", "Date")) &
+      !all(is_invalid_number(obj))
+  ) {
     obj_hist <- graphics::hist.default(as.numeric(obj), plot = FALSE)$counts
   } else {
     # this is very much adhoc, it is ugly and looks kinda hacky, but, it is way
@@ -158,8 +160,13 @@ get_stats <- function(obj) {
 #' @rdname get_stats
 get_stats.default <- function(obj) {
   num_stats <- c(
-    mean = NA, sd = NA, min = NA, q25 = NA, median = NA,
-    q75 = NA, max = NA
+    mean = NA,
+    sd = NA,
+    min = NA,
+    q25 = NA,
+    median = NA,
+    q75 = NA,
+    max = NA
   )
 
   num_stats
@@ -188,9 +195,16 @@ get_stats.Date <- function(obj) {
       format.Date(format = "%Y-%m-%d"),
     stats::sd(obj, na.rm = TRUE) %>%
       scales::comma(accuracy = NULL, suffix = " days"),
-    stats::quantile(obj, probs = seq(0, 1, 0.25), na.rm = TRUE, names = FALSE, type = 1) %>%
+    stats::quantile(
+      obj,
+      probs = seq(0, 1, 0.25),
+      na.rm = TRUE,
+      names = FALSE,
+      type = 1
+    ) %>%
       format.Date(format = "%Y-%m-%d")
-  ) %>% magrittr::set_names(names(get_stats.default()))
+  ) %>%
+    magrittr::set_names(names(get_stats.default()))
 
   num_stats
 }
@@ -203,9 +217,16 @@ get_stats.POSIXct <- function(obj) {
       format.POSIXct(),
     stats::sd(obj, na.rm = TRUE) %>%
       scales::comma(accuracy = NULL, suffix = " seconds"),
-    stats::quantile(obj, seq(0, 1, 0.25), na.rm = TRUE, names = FALSE, type = 1) %>%
+    stats::quantile(
+      obj,
+      seq(0, 1, 0.25),
+      na.rm = TRUE,
+      names = FALSE,
+      type = 1
+    ) %>%
       format.POSIXct()
-  ) %>% magrittr::set_names(names(get_stats.default()))
+  ) %>%
+    magrittr::set_names(names(get_stats.default()))
 
   num_stats
 }
@@ -241,23 +262,34 @@ make_tooltip <- function(text, tooltip) {
 make_mix <- function(stat_var, top_key, top_count, top_count_p, top_k) {
   text <- case_when(
     !is.na(stat_var) ~ paste0("<b>", stat_var, "</b>"),
-    is.na(stat_var) & !is.na(top_count) ~ paste0(
-      "<b>", stringr::str_trunc(top_key, 14), "</b><br>",
-      "<small><i>",
-      scales::comma(top_count, accuracy = 1), " [",
-      scales::percent(top_count_p, accuracy = 0.1), "]",
-      "</i></small>"
-    ),
+    is.na(stat_var) & !is.na(top_count) ~
+      paste0(
+        "<b>",
+        stringr::str_trunc(top_key, 14),
+        "</b><br>",
+        "<small><i>",
+        scales::comma(top_count, accuracy = 1),
+        " [",
+        scales::percent(top_count_p, accuracy = 0.1),
+        "]",
+        "</i></small>"
+      ),
     TRUE ~ ""
   )
 
   tooltip <- case_when(
-    !is.na(top_count) ~ paste0(
-      "Top ", top_k, ":\n\n",
-      top_key, "\n",
-      scales::comma(top_count, accuracy = 1), " [",
-      scales::percent(top_count_p, accuracy = 0.1), "]"
-    ),
+    !is.na(top_count) ~
+      paste0(
+        "Top ",
+        top_k,
+        ":\n\n",
+        top_key,
+        "\n",
+        scales::comma(top_count, accuracy = 1),
+        " [",
+        scales::percent(top_count_p, accuracy = 0.1),
+        "]"
+      ),
     TRUE ~ ""
   )
 
@@ -293,6 +325,7 @@ abridge_df <- function(df, file = NULL, ...) {
   summary_dt <- visualize_summary(summary_df)
 
   if (!missing(file)) {
+    fs::dir_create(fs::path_dir(file))
     DT::saveWidget(summary_dt, file, ...)
   }
 
@@ -322,24 +355,21 @@ abridge_df <- function(df, file = NULL, ...) {
 #' @md
 #' @keywords internal
 visualize_summary <- function(summary_df) {
-  NULL -> n_na -> n_uniq -> obj_class -> obj_hist -> obj_label ->
-  obj_type -> p_na -> p_uniq -> q25 -> q75 -> median -> sd -> st1 -> st2 ->
-  st3 -> st4 -> st5 -> st6 -> st7 -> top1_count -> top1_count_p ->
-  top1_key -> top2_count -> top2_count_p -> top2_key -> top3_count ->
-  top3_count_p -> top3_key -> top4_count -> top4_count_p -> top4_key ->
-  top5_count -> top5_count_p -> top5_key -> top6_count -> top6_count_p ->
-  top6_key -> top7_count -> top7_count_p -> top7_key -> varname -> Variable ->
-  Type -> Hist
+  NULL -> n_na -> n_uniq -> obj_class -> obj_hist -> obj_label -> obj_type -> p_na -> p_uniq -> q25 -> q75 -> median -> sd -> st1 -> st2 -> st3 -> st4 -> st5 -> st6 -> st7 -> top1_count -> top1_count_p -> top1_key -> top2_count -> top2_count_p -> top2_key -> top3_count -> top3_count_p -> top3_key -> top4_count -> top4_count_p -> top4_key -> top5_count -> top5_count_p -> top5_key -> top6_count -> top6_count_p -> top6_key -> top7_count -> top7_count_p -> top7_key -> varname -> Variable -> Type -> Hist
 
   summary_df %>%
-    mutate(Variable = make_tooltip(
-      text = paste0("<b>", varname, "</b>"),
-      tooltip = obj_label
-    )) %>%
-    mutate(Type = make_tooltip(
-      stringr::str_trunc(obj_class, 14),
-      paste0("class:\n", obj_class, "\n\ntypeof:\n", obj_type, "")
-    )) %>%
+    mutate(
+      Variable = make_tooltip(
+        text = paste0("<b>", varname, "</b>"),
+        tooltip = obj_label
+      )
+    ) %>%
+    mutate(
+      Type = make_tooltip(
+        stringr::str_trunc(obj_class, 14),
+        paste0("class:\n", obj_class, "\n\ntypeof:\n", obj_type, "")
+      )
+    ) %>%
     mutate(st1 = make_mix(mean, top1_key, top1_count, top1_count_p, 1)) %>%
     mutate(st2 = make_mix(sd, top2_key, top2_count, top2_count_p, 2)) %>%
     mutate(st3 = make_mix(min, top3_key, top3_count, top3_count_p, 3)) %>%
@@ -348,11 +378,15 @@ visualize_summary <- function(summary_df) {
     mutate(st6 = make_mix(q75, top6_key, top6_count, top6_count_p, 6)) %>%
     mutate(st7 = make_mix(max, top7_key, top7_count, top7_count_p, 7)) %>%
     rowwise() %>%
-    mutate(Hist = sparkline::spk_chr(
-      obj_hist,
-      type = "bar", zeroColor = "#ffffff", chartRangeMin = "0",
-      barColor = ifelse(!is.na(mean), "#3366cc", "#00ff7f")
-    )) %>%
+    mutate(
+      Hist = sparkline::spk_chr(
+        obj_hist,
+        type = "bar",
+        zeroColor = "#ffffff",
+        chartRangeMin = "0",
+        barColor = ifelse(!is.na(mean), "#3366cc", "#00ff7f")
+      )
+    ) %>%
     select(
       Var = Variable,
       Type,
@@ -369,14 +403,22 @@ visualize_summary <- function(summary_df) {
       `max<br>Top7` = st7,
       Hist
     ) %>%
-    rename_with(.fn = make_tooltip, .cols = 1, tooltip = paste0(
-      "Variable name. If the variable has an associated label, it would ",
-      "appear as tooltip"
-    )) %>%
-    rename_with(.fn = make_tooltip, .cols = 2, tooltip = paste0(
-      "Data type of the variable as returned by class(). In the tooltip also ",
-      "appears the typeof()"
-    )) %>%
+    rename_with(
+      .fn = make_tooltip,
+      .cols = 1,
+      tooltip = paste0(
+        "Variable name. If the variable has an associated label, it would ",
+        "appear as tooltip"
+      )
+    ) %>%
+    rename_with(
+      .fn = make_tooltip,
+      .cols = 2,
+      tooltip = paste0(
+        "Data type of the variable as returned by class(). In the tooltip also ",
+        "appears the typeof()"
+      )
+    ) %>%
     DT::datatable(
       escape = FALSE,
       class = "display cell-border responsive nowrap compact",
@@ -436,7 +478,6 @@ visualize_summary <- function(summary_df) {
     ) %>%
     sparkline::spk_add_deps()
 }
-
 
 
 # tabulate ####
@@ -531,7 +572,9 @@ are_paired <- function(df, ...) {
   if (rlang::dots_n(...) > 0) {
     df <- dplyr::select(df, ...)
   }
-  if (rlang::dots_n(...) == 1) warning("Does not really make sense for 1 var!")
+  if (rlang::dots_n(...) == 1) {
+    warning("Does not really make sense for 1 var!")
+  }
 
   # there must be better algorithms for this (check for example how to
   # determine composite indexes in databases, which has been extensively
@@ -547,7 +590,6 @@ are_paired <- function(df, ...) {
   print(nuniq_each)
   any(nuniq_each == nuniq_all)
 }
-
 
 
 #' "Delete by ellipsis" column names, putting the original
